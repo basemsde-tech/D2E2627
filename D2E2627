@@ -1,0 +1,1585 @@
+<!doctype html>
+<!-- Drive2Earn v3.8 | build 2026-06-07 | single-file PWA -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080808">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Drive2Earn v3.8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  <style>
+    :root {
+      --bg:#080808; --bg2:#111111; --bg3:#191919; --border:#242424; --text:#f5f0e8; --muted:#a89878;
+      --gold:#d4a017; --gold2:#b8860b; --gold3:#f0c040; --red:#e05252; --green:#32d583; --purple:#a78bfa; --slate:#8fb0f0;
+      --shadow:0 22px 70px rgba(0,0,0,.38); --radius:8px;
+    }
+    [data-theme="light"] {
+      --bg:#f5f0e8; --bg2:#ffffff; --bg3:#ede8da; --border:#d8d0b8; --text:#180e00; --muted:#6f624a;
+      --gold:#b8860b; --gold2:#936800; --gold3:#d4a017; --red:#c04040; --green:#087f5b; --purple:#6d28d9; --slate:#3f5bb5;
+      --shadow:0 18px 55px rgba(60,38,0,.16);
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg);-webkit-text-size-adjust:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Outfit,system-ui,sans-serif;letter-spacing:0;padding:env(safe-area-inset-top) 0 calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}
+    button,input,select,textarea{font:inherit;font-size:16px!important;color:inherit}
+    button{border:0;cursor:pointer;touch-action:manipulation}
+    .app{width:min(100%,430px);min-height:100vh;margin:0 auto;background:radial-gradient(circle at top,#1b1508 0,#080808 38%,var(--bg) 70%);padding:14px}
+    [data-theme="light"] .app{background:linear-gradient(180deg,#fff7e6 0,var(--bg) 38%)}
+    h1,h2,h3,.big,.brand{font-family:"Bricolage Grotesque",Outfit,sans-serif;margin:0;letter-spacing:0}
+    .mono{font-family:"Geist Mono",monospace}.muted{color:var(--muted)}.gold{color:var(--gold3)}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 14px}
+    .hello{display:flex;gap:11px;align-items:center;min-width:0;background:transparent;padding:0}
+    .avatar{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#1a1200;font-weight:800;font-size:15px;box-shadow:0 4px 14px rgba(212,160,23,.30);flex:0 0 auto}
+    .hello-text{min-width:0;text-align:left}
+    .hello-text h1{font-size:19px;line-height:1.1;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hello-text p{margin:1px 0 0;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .island{position:relative;display:flex;align-items:center;gap:3px;border:1px solid var(--border);background:var(--bg2);color:var(--text);border-radius:999px;padding:4px 5px 4px 12px;box-shadow:var(--shadow);flex:0 0 auto}
+    .island-row{display:flex;align-items:center;gap:7px;font-size:13px;background:transparent;color:inherit;border:0;padding:0;cursor:pointer}
+    .island-row b{color:var(--text);font-weight:700;font-variant-numeric:tabular-nums}
+    .wx-ico{width:16px;height:16px;color:var(--gold3);flex:0 0 auto}
+    .isl-div{width:1px;height:15px;background:var(--border);flex:0 0 auto}
+    .isl-date{color:var(--muted);font-size:12px;white-space:nowrap}
+    .iconbtn{width:34px;height:34px;border-radius:999px;display:grid;place-items:center;background:var(--bg3);border:1px solid var(--border);color:var(--text);flex:0 0 auto}
+    .iconbtn svg{width:16px;height:16px}
+    .iconbtn .ico-moon{display:none}.iconbtn .ico-sun{display:block}
+    [data-theme="light"] .iconbtn .ico-sun{display:none}[data-theme="light"] .iconbtn .ico-moon{display:block}
+    .island-panel{display:none;position:absolute;right:0;top:48px;width:248px;z-index:5;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:13px;box-shadow:var(--shadow);color:var(--text)}
+    .island-panel>b{color:var(--text);font-size:14px}
+    .island.open .island-panel{display:block}.island-panel .grid{grid-template-columns:1fr 1fr;margin-top:8px}
+    .island-panel .stat b{color:var(--text)}
+    .card,.panel,.chip{background:rgba(17,17,17,.88);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow)}
+    [data-theme="light"] .card,[data-theme="light"] .panel,[data-theme="light"] .chip{background:rgba(255,255,255,.88)}
+    .nudge{padding:11px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:rgba(212,160,23,.35)}
+    .nudge strong{font-family:"Bricolage Grotesque";font-size:15px}.nudge span{font-size:12px;color:var(--muted)}
+    .rego-select{width:auto;min-width:120px;max-width:172px;padding:9px 30px 9px 12px;font-weight:700;color:var(--text)}
+    .rego-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .rego-chip{display:inline-flex;align-items:center;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:5px 5px 5px 12px;font-size:13px;font-weight:600;color:var(--text)}
+    .rego-chip button{width:22px;height:22px;border-radius:999px;background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:0;display:grid;place-items:center}
+    .rego-chip button:hover{color:var(--text)}
+    .date-strip,.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
+    .pill{border-radius:999px;border:1px solid var(--border);background:var(--bg2);padding:10px 11px;text-align:center;font-weight:700}
+    .pill.active,.primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .hero{padding:16px;margin:12px 0;overflow:hidden}.hero-head{display:flex;align-items:center;justify-content:space-between}
+    .total{font-size:56px;line-height:.95;margin:12px 0 8px;background:linear-gradient(180deg,#fff,var(--gold3));-webkit-background-clip:text;background-clip:text;color:transparent;transition:transform .18s}
+    .total.pulse{transform:scale(1.035)}
+    .formula{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bar{height:10px;border-radius:999px;overflow:hidden;background:var(--bg3);display:flex;margin:13px 0}.bar span{height:100%;min-width:3px}
+    .legend,.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.legend div,.stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px}
+    .legend small,.stat small{display:block;color:var(--muted);font-size:11px}.legend b,.stat b{font-family:"Bricolage Grotesque";font-size:16px}
+    [data-theme="light"] .hero{background:#0b0b0b!important;border-color:#232323;color:#f5f0e8;box-shadow:0 22px 70px rgba(0,0,0,.28)}
+    [data-theme="light"] .hero .muted,[data-theme="light"] .hero .formula,[data-theme="light"] .hero .legend small{color:#bdb39f}
+    [data-theme="light"] .hero .tag{background:rgba(212,160,23,.12);border-color:rgba(212,160,23,.35);color:#f0c040}
+    [data-theme="light"] .hero .legend div{background:#191919;border-color:#292929;color:#f5f0e8}
+    [data-theme="light"] .hero .bar{background:#222}
+    .chips{display:grid;gap:9px}.chip{overflow:hidden}.chip>button{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;background:transparent;padding:13px}
+    .chip[data-chip="eos"]{border-color:rgba(240,192,64,.55);background:linear-gradient(135deg,rgba(212,160,23,.22),rgba(17,17,17,.9));box-shadow:0 18px 55px rgba(212,160,23,.16)}
+    .chip[data-chip="eos"] .dot{width:18px;height:18px;border-radius:6px;background:linear-gradient(135deg,var(--gold3),var(--gold2));box-shadow:0 0 0 4px rgba(212,160,23,.12)}
+    .chip[data-chip="eos"] b{font-size:20px;color:var(--gold3)}
+    .chip[data-chip="receipt"]{border-style:dashed;border-color:rgba(245,240,232,.35);background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 8px,transparent 8px,transparent 16px),rgba(17,17,17,.88)}
+    .chip[data-chip="receipt"] .dot{background:transparent;border:2px solid var(--gold3)}
+    .chip[data-chip="receipt"] b{color:var(--gold3)}
+    [data-theme="light"] .chip[data-chip="eos"]{background:linear-gradient(135deg,rgba(212,160,23,.2),rgba(255,255,255,.92))}
+    [data-theme="light"] .chip[data-chip="receipt"]{border-color:rgba(24,14,0,.3);background:repeating-linear-gradient(135deg,rgba(184,134,11,.08) 0,rgba(184,134,11,.08) 8px,transparent 8px,transparent 16px),rgba(255,255,255,.9)}
+    .chip-title{display:flex;align-items:center;gap:9px;font-weight:800}.dot{width:9px;height:9px;border-radius:50%;background:var(--gold3)}
+    .chip-content{display:none;padding:0 13px 13px}.chip.open .chip-content{display:block}
+    .row{display:grid;grid-template-columns:1fr 118px 34px;gap:8px;margin:8px 0}.row.two{grid-template-columns:1fr 118px}.row.one{grid-template-columns:1fr}
+    input,select,textarea{width:100%;border:1px solid var(--border);background:var(--bg3);border-radius:8px;padding:11px 10px;outline:none}
+    textarea{min-height:106px;resize:vertical}.mini{width:34px;height:42px;border-radius:8px;background:var(--bg3);border:1px solid var(--border)}
+    .add,.secondary{border:1px solid var(--border);background:var(--bg3);border-radius:8px;padding:10px 12px;font-weight:800}
+    .primary{width:100%;border-radius:8px;padding:14px 15px;font-weight:900;margin:12px 0 10px}
+    .preview{padding:12px;white-space:pre-wrap;font-family:"Geist Mono";font-size:12px;line-height:1.55}.preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+    .screen{display:none}.screen.active{display:block}.subhead{display:flex;align-items:end;justify-content:space-between;margin:7px 0 12px}.subhead h2{font-size:30px}.subhead p{margin:0;color:var(--muted);font-size:12px}
+    .week-table{padding:12px;border-top:4px solid var(--gold);overflow:hidden}.table-row{display:grid;grid-template-columns:1fr .7fr .78fr 52px 38px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+    .table-row.head{color:var(--muted);font-size:11px;text-transform:uppercase}.tag{display:inline-flex;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--gold3);border-radius:999px;padding:4px 7px;font-size:11px}
+    .total-row{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed var(--border);margin-top:10px;padding-top:13px}.total-row b{font-family:"Bricolage Grotesque";font-size:28px;color:var(--gold3)}
+    .filter{display:flex;gap:6px;overflow:auto;padding-bottom:8px}.filter button{white-space:nowrap}
+    .expense-form{display:grid;gap:8px;margin:8px 0}.expense-form .row{margin:0}.expense-list{display:grid;gap:7px;margin-top:10px}.expense-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px}.expense-item small{display:block;color:var(--muted);font-size:11px}.expense-item b{color:var(--gold3)}
+    .checkline{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px}.checkline input{width:auto}
+    .settings-list{display:grid;gap:9px}.setting{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px}.setting p{margin:2px 0 0;color:var(--muted);font-size:12px}
+    .setting.full{display:block}.quick-share-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.quick-share-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+    .switch{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:3px}.switch button{padding:7px 10px;border-radius:999px;background:transparent}.switch button.active{background:var(--gold);color:#160d00}
+    .tabbar{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(402px,calc(100% - 22px));height:68px;border:1px solid rgba(255,255,255,.13);background:rgba(12,12,12,.78);backdrop-filter:blur(22px);border-radius:999px;display:grid;grid-template-columns:1fr 1fr 1.12fr 1fr 1fr;gap:4px;padding:7px;z-index:20;box-shadow:0 18px 55px rgba(0,0,0,.42)}
+    [data-theme="light"] .tabbar{background:rgba(255,255,255,.76);border-color:rgba(80,58,10,.18)}
+    .tabbar button{position:relative;background:transparent;border-radius:999px;color:var(--muted);font-size:10px;font-weight:800;display:grid;place-items:center;gap:2px}.tabbar svg{width:19px;height:19px}.tabbar button.active{color:var(--gold3)}
+    .tabbar .shift{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#160d00;border-radius:22px}.tabbar .shift.active{color:#160d00}
+    .view-btn{height:34px;border-radius:8px;background:rgba(212,160,23,.16);border:1px solid rgba(212,160,23,.35);color:var(--gold3);font-size:12px;font-weight:900}
+    .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#151515;color:#fff;border:1px solid #333;border-radius:999px;padding:10px 14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;place-items:center;padding:20px}.modal.show{display:grid}.modal-card{width:min(100%,390px);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;box-shadow:var(--shadow)}
+    /* ── Dual-action share sheet ── */
+    .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:70;opacity:0;pointer-events:none;transition:opacity .25s}
+    .sheet-overlay.show{opacity:1;pointer-events:auto}
+    .sheet-card{position:absolute;left:50%;bottom:0;transform:translate(-50%,100%);width:min(100%,430px);background:var(--bg2);border:1px solid var(--border);border-bottom:0;border-radius:22px 22px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -18px 55px rgba(0,0,0,.45);transition:transform .32s cubic-bezier(.32,.72,0,1);touch-action:none;will-change:transform}
+    .sheet-overlay.show .sheet-card{transform:translate(-50%,0)}
+    .sheet-grip{width:42px;height:5px;border-radius:999px;background:var(--border);margin:6px auto 12px}
+    .sheet-title{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;font-weight:800;text-align:center}
+    .sheet-sub{color:var(--muted);font-size:12.5px;text-align:center;margin:4px 12px 16px;line-height:1.45}
+    .sheet-btn{width:100%;border-radius:14px;padding:15px;font-weight:800;font-size:15px;margin-bottom:9px;transition:transform .1s}
+    .sheet-btn:active{transform:scale(.98)}
+    .sheet-btn.primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
+    .sheet-btn.secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
+    .modal-card .preview-message{white-space:pre-wrap;font-family:"Geist Mono",monospace;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);line-height:1.55}
+    .receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.receipt{aspect-ratio:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;overflow:hidden}.receipt img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+    @media (max-height:500px){.tabbar{height:56px}.tabbar button{font-size:9px}.total{font-size:44px}body{padding-bottom:74px}}
+    .qf{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+    /* ── BAS Quarter Quick Pull ── */
+    .bas-pull{padding:12px 13px;margin-bottom:9px;border-top:3px solid var(--gold)}
+    .bas-pull-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+    .bas-fy{font-size:11px;font-weight:700;color:var(--muted)}
+    .bas-pull-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+    .bas-chip{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 3px;min-height:48px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);transition:transform .1s,background .15s,border-color .15s}
+    .bas-chip:active{transform:scale(.95)}
+    .bas-chip b{font-family:"Bricolage Grotesque",sans-serif;font-size:15px;line-height:1.05}
+    .bas-chip small{font-size:9.5px;color:var(--muted);line-height:1;white-space:nowrap}
+    .bas-chip.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .bas-chip.active small{color:#3a2a00}
+    @media (max-width:340px){.bas-chip small{font-size:9px}.bas-chip b{font-size:14px}}
+    /* ── Reports redesign: Net hero, metric grid, audit, export ── */
+    .rep-net{padding:15px 16px;margin-bottom:9px;border-top:3px solid var(--gold);background:linear-gradient(135deg,rgba(212,160,23,.10),rgba(17,17,17,.92))}
+    [data-theme="light"] .rep-net{background:linear-gradient(135deg,rgba(212,160,23,.13),rgba(255,255,255,.93))}
+    .rep-net .rn-label{font-size:11px;text-transform:uppercase;letter-spacing:.85px;color:var(--muted);font-weight:800}
+    .rep-net .rn-val{font-family:"Bricolage Grotesque",sans-serif;font-size:42px;line-height:1;margin:5px 0 3px;font-variant-numeric:tabular-nums;color:var(--green)}
+    .rep-net .rn-val.neg{color:var(--red)}
+    .rep-net .rn-sub{font-size:11px;color:var(--muted)}
+    .net-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px}
+    .net-tile{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:7px 5px;text-align:center;min-width:0}
+    .net-tile small{display:block;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .net-tile b{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .net-tile.minus b{color:var(--red)}
+    .metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
+    .metric{background:rgba(17,17,17,.88);border:1px solid var(--border);border-radius:13px;padding:12px;box-shadow:var(--shadow);min-width:0}
+    [data-theme="light"] .metric{background:rgba(255,255,255,.9)}
+    .metric .m-top{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted)}
+    .metric .m-top .dot{width:7px;height:7px}
+    .metric .m-val{font-family:"Bricolage Grotesque",sans-serif;font-size:23px;color:var(--gold3);margin:6px 0 2px;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .metric .m-sub{font-size:10.5px;color:var(--muted)}
+    .metric .m-warn{display:flex;align-items:center;gap:5px;margin-top:7px;font-size:10.5px;font-weight:800;color:var(--gold3)}
+    .metric .m-warn svg{width:13px;height:13px;flex:0 0 auto}
+    .fuel-pill{display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:3px 9px;font-size:10px;color:var(--text);font-weight:600;white-space:nowrap;max-width:100%;overflow:hidden}
+    .fuel-pill b{color:var(--gold3)}
+    .export-hub{padding:13px 14px}
+    .export-hub .exp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .export-cluster{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .export-cluster button{border-radius:13px;padding:14px;font-weight:800;font-size:14px;transition:transform .1s}
+    .export-cluster button:active{transform:scale(.98)}
+    .export-cluster .exp-copy{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
+    .export-cluster .exp-dl{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
+    /* ── Tax Expenses smart card ── */
+    .exp-card{padding:0;overflow:hidden;margin-bottom:9px}
+    .exp-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;padding:14px;color:var(--text)}
+    .exp-head-right{display:flex;align-items:center;gap:9px}
+    .exp-total{font-family:"Bricolage Grotesque",sans-serif;font-size:18px;color:var(--gold3)}
+    .exp-chev{width:18px;height:18px;color:var(--muted);transition:transform .25s}
+    .exp-card.open .exp-chev{transform:rotate(180deg)}
+    .exp-body{display:none;padding:0 13px 13px}
+    .exp-card.open .exp-body{display:block}
+    .exp-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}
+    .exp-summary .stat{padding:9px 7px;text-align:center}
+    .exp-summary .stat small{font-size:9.5px;text-transform:uppercase;letter-spacing:.3px}
+    .exp-summary .stat b{font-size:16px;color:var(--gold3)}
+    .exp-recur-note{font-size:10.5px;color:var(--gold3);background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.3);border-radius:8px;padding:6px 9px;margin-bottom:9px}
+    .exp-quick{display:flex;flex-direction:column;gap:8px}
+    .exp-amount{font-size:18px!important;font-weight:700;padding:13px 12px}
+    .exp-chips{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:3px;scrollbar-width:none}
+    .exp-chips::-webkit-scrollbar{display:none}
+    .exp-chip{flex:0 0 auto;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:700;min-height:38px;transition:transform .1s,background .15s}
+    .exp-chip:active{transform:scale(.95)}
+    .exp-chip.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .exp-chip.more{border-style:dashed}
+    .exp-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+    .exp-receipt{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12.5px;font-weight:700;cursor:pointer;flex:0 0 auto}
+    .exp-receipt svg{width:16px;height:16px;color:var(--gold3)}
+    .exp-recur-toggle{display:inline-flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:9px 12px;font-size:12.5px;font-weight:700;flex:0 0 auto}
+    .exp-recur-toggle .ert-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--muted);transition:.15s}
+    .exp-recur-toggle.on{border-color:var(--gold3);color:var(--gold3)}
+    .exp-recur-toggle.on .ert-dot{background:var(--gold3);border-color:var(--gold3);box-shadow:0 0 0 3px rgba(212,160,23,.18)}
+    .exp-freq{width:auto;min-width:104px;flex:0 0 auto}
+    .exp-details-toggle{background:transparent;border:0;color:var(--gold3);font-size:12px;font-weight:700;text-align:left;padding:2px 0}
+    .exp-more-fields{display:flex;flex-direction:column;gap:8px}
+    .exp-more-fields .row{margin:0}
+    .exp-gst{font-size:10px;font-weight:700;color:var(--green)}
+    .exp-recur-tag{font-size:9.5px;font-weight:800;color:var(--gold3);background:rgba(212,160,23,.12);border-radius:999px;padding:1px 6px}
+    .qf button{flex:1 1 0;min-height:40px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;padding:0 8px;transition:transform .1s,background .15s}
+    .qf button:active{transform:scale(.96)}
+    .qf button.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .daterow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+    .datefield{display:flex;flex-direction:column;gap:1px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:6px 11px;min-height:46px;justify-content:center}
+    .datefield small{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px}
+    .datefield input{border:0;background:transparent;padding:0;font-weight:700;font-size:15px;color:var(--text);width:100%}
+    .weeknav{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    .weeknav .wklabel{flex:1;text-align:center;font-weight:800;font-size:14px;font-family:"Bricolage Grotesque",sans-serif}
+    .weeknav button{width:48px;min-height:46px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--gold3);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:transform .1s}
+    .weeknav button:active{transform:scale(.94)}
+    .hero-sum{padding:16px;margin-bottom:10px;border-top:3px solid var(--gold)}
+    .hero-sum .hs-total{font-family:"Bricolage Grotesque",sans-serif;font-size:44px;line-height:1;color:var(--gold3);margin:8px 0 4px;font-variant-numeric:tabular-nums}
+    .hero-sum .hs-sub{color:var(--muted);font-size:12px}
+    /* ── Sync dot indicator ── */
+    .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:0 0 auto;transition:background .3s}
+    .sync-dot.live{background:var(--green);box-shadow:0 0 0 3px rgba(50,213,131,.2);animation:syncPulse 2.5s ease-in-out infinite}
+    .sync-dot.error{background:var(--red)}
+    .sync-dot.idle{background:var(--muted)}
+    @keyframes syncPulse{0%,100%{box-shadow:0 0 0 3px rgba(50,213,131,.2)}50%{box-shadow:0 0 0 6px rgba(50,213,131,.05)}}
+    .sync-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+    /* ── Weekly status bar ── */
+    .wk-status-toggle{width:34px;height:34px;border-radius:999px;background:var(--bg3);border:1px solid var(--border);color:var(--gold3);display:grid;place-items:center;flex:0 0 auto;transition:transform .25s}
+    .wk-status-toggle svg{width:17px;height:17px;transition:transform .25s}
+    .wk-status-toggle.hidden svg{transform:rotate(-90deg)}
+    .wk-status{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:11px 14px;margin-bottom:9px;box-shadow:var(--shadow);overflow:hidden;transition:max-height .3s ease,opacity .25s ease,padding .25s ease,margin .25s ease;max-height:60px;opacity:1}
+    .wk-status.collapsed{max-height:0;opacity:0;padding-top:0;padding-bottom:0;margin-bottom:0;border-width:0}
+    .wk-status-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+    .wk-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 13px;font-size:13px;font-weight:800;font-family:"Bricolage Grotesque",sans-serif}
+    .wk-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+    .wk-badge.current{background:rgba(212,160,23,.15);color:var(--gold3);border:1px solid rgba(212,160,23,.4)}
+    .wk-badge.credited{background:rgba(50,213,131,.13);color:var(--green);border:1px solid rgba(50,213,131,.4)}
+    .wk-badge.pending{background:rgba(125,162,255,.12);color:var(--slate);border:1px solid rgba(125,162,255,.42)}
+    /* ── Redesigned settings groups ── */
+    .set-group{margin-bottom:14px}
+    .set-group-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:800;margin:0 0 8px 4px}
+    .set-card{background:rgba(17,17,17,.88);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+    [data-theme="light"] .set-card{background:rgba(255,255,255,.9)}
+    .set-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;border-bottom:1px solid var(--border);width:100%;background:transparent;text-align:left}
+    .set-item:last-child{border-bottom:0}
+    .set-item .si-label{min-width:0}
+    .set-item .si-label b{display:block;font-size:14.5px;font-weight:700}
+    .set-item .si-label p{margin:1px 0 0;font-size:11.5px;color:var(--muted)}
+    .set-item .si-control{flex:0 0 auto;display:flex;align-items:center;gap:8px}
+    .set-item input,.set-item select{width:auto;min-width:88px;max-width:130px;padding:8px 10px;border-radius:9px}
+    .set-item.stack{flex-direction:column;align-items:stretch;gap:9px}
+    .set-chev{color:var(--muted);font-size:18px;line-height:1}
+    /* ── Validation error styling ── */
+    .field-error{outline:2px solid var(--red)!important;outline-offset:-1px}
+    .validate-msg{display:none;background:rgba(224,82,82,.12);border:1px solid rgba(224,82,82,.4);color:var(--red);border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;margin:0 0 10px;line-height:1.4}
+    .validate-msg.show{display:block;animation:vshake .35s}
+    @keyframes vshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+    .chip[data-chip="hail"].required>button .chip-title::after,.chip[data-chip="receipt"].required>button .chip-title::after{content:"Required";font-size:10px;font-weight:800;color:var(--red);background:rgba(224,82,82,.13);border:1px solid rgba(224,82,82,.35);border-radius:999px;padding:2px 7px;margin-left:7px}
+    .chip.field-error{outline:2px solid var(--red);outline-offset:-1px}
+    /* ── Week-cycle clock selector ── */
+    .weekclock-wrap{display:flex;flex-direction:column;align-items:center;gap:9px;width:100%;padding:4px 0 2px}
+    .weekclock{display:flex;justify-content:center;width:100%}
+    .weekclock svg{width:218px;height:218px;max-width:74vw;touch-action:none;-webkit-user-select:none;user-select:none}
+    .wc-track{fill:none;stroke:var(--border);stroke-width:6}
+    .wc-arc{fill:none;stroke:var(--gold3);stroke-width:6;stroke-linecap:round;opacity:.92;transition:d .12s}
+    .wc-dot-mark{fill:var(--muted);transition:fill .15s}
+    .wc-dot-mark.startday,.wc-dot-mark.endday{fill:#150d00}
+    .wc-label{fill:var(--muted);font:700 12px Outfit,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none;transition:fill .15s}
+    .wc-label.startday{fill:var(--gold3)}
+    .wc-label.endday{fill:var(--text)}
+    .wc-pin{cursor:grab}
+    .wc-pin-start{fill:url(#wcg);stroke:#150d00;stroke-width:1}
+    .wc-pin-end{fill:var(--bg2);stroke:var(--gold3);stroke-width:2.5}
+    .wc-pin-txt{font:800 11px Outfit,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+    .wc-center{fill:var(--text);font:800 16px "Bricolage Grotesque",sans-serif;text-anchor:middle;dominant-baseline:central}
+    .wc-center-sub{fill:var(--muted);font:600 9px Outfit,sans-serif;text-anchor:middle;dominant-baseline:central;text-transform:uppercase;letter-spacing:.6px}
+    .wc-legend{display:flex;gap:16px;font-size:11.5px;color:var(--muted)}
+    .wc-legend span{display:inline-flex;align-items:center;gap:5px}
+    .wc-legend b{color:var(--text);font-weight:700}
+    .wc-key{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
+    .wc-key.s{background:linear-gradient(135deg,var(--gold3),var(--gold2))}
+    .wc-key.e{background:var(--bg2);border:2px solid var(--gold3)}
+    @media (min-width:600px){.tabbar{width:430px}.app{border-left:1px solid var(--border);border-right:1px solid var(--border)}}
+  </style>
+</head>
+<body>
+<main class="app" id="app">
+  <section class="screen active" data-screen="shift">
+    <header class="top">
+      <button class="hello" data-go="profile" aria-label="Open profile">
+        <span class="avatar" id="avatar">D2</span>
+        <span class="hello-text"><h1 id="greeting">Hey, Driver</h1><p id="todayLabel">Today</p></span>
+      </button>
+      <div class="island" id="island">
+        <button class="island-row" id="islandToggle" aria-label="Weather details">
+          <svg class="wx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+          <b id="temp">--</b>
+          <span class="isl-div"></span>
+          <span class="isl-date" id="miniDate">--</span>
+        </button>
+        <button class="iconbtn" id="themeBtn" aria-label="Toggle light or dark theme">
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        </button>
+        <div class="island-panel">
+          <b id="weatherDesc">Weather loading</b>
+          <div class="grid"><div class="stat"><small>Suburb</small><b id="suburb">Melbourne</b></div><div class="stat"><small>Clock</small><b id="clock">--</b></div><div class="stat"><small>Humidity</small><b id="humidity">--</b></div><div class="stat"><small>Wind</small><b id="wind">--</b></div></div>
+          <label class="muted" style="display:block;margin-top:10px;font-size:12px">Timezone</label>
+          <select id="timezone"><option>Australia/Melbourne</option><option>Australia/Sydney</option><option>UTC</option><option>Asia/Kolkata</option></select>
+        </div>
+      </div>
+    </header>
+    <div class="card nudge" id="regoCard"><span><strong>Vehicle rego</strong><br><span id="nudgeSub">Hail trips are private and excluded from share text.</span></span><select id="regoSelect" class="rego-select" aria-label="Select rego"></select></div>
+    <div class="date-strip">
+      <button class="pill active" id="todayBtn">Today</button><button class="pill" id="yesterdayBtn">Yesterday</button><button class="pill" id="pickBtn">Pick</button>
+    </div>
+    <input type="date" id="shiftDate" style="position:absolute;width:1px;height:1px;opacity:0;border:0;padding:0;margin:0">
+    <section class="card hero" id="shiftCapture">
+      <div class="hero-head"><span class="mono muted">TOTAL AMOUNT</span><span class="tag" id="heroRego">No rego</span></div>
+      <div class="total" id="takeHome">$0.00</div>
+      <div class="formula mono" id="formula">(0 x 0.55) - 0 + 0 = 0</div>
+      <div class="bar" id="bar"></div>
+      <div class="legend">
+        <div><small>EOS</small><b id="eosLegend">$0</b></div><div><small>Cash</small><b id="cashLegend">$0</b></div><div><small>Runs</small><b id="runsLegend">$0</b></div><div><small>Fuel</small><b id="fuelLegend">$0</b></div>
+      </div>
+    </section>
+    <section class="chips" id="shiftChips">
+      <article class="chip open" data-chip="eos"><button><span class="chip-title"><span class="dot"></span>EOS Takings</span><b id="eosChip">$0.00</b></button><div class="chip-content"><div id="eosRows"></div><button class="add" data-add="eos">Add EOS</button></div></article>
+      <article class="chip" data-chip="cash"><button><span class="chip-title"><span class="dot"></span>Cash Income</span><b id="cashChip">$0.00</b></button><div class="chip-content"><div id="cashRows"></div><button class="add" data-add="cash">Add Cash</button></div></article>
+      <article class="chip" data-chip="runs"><button><span class="chip-title"><span class="dot"></span>Runs &amp; Accounts</span><b id="runsChip">$0.00</b></button><div class="chip-content"><div class="row two"><input id="runCount" type="number" min="0" inputmode="numeric" placeholder="Passenger count"><input value="$5 / pax" disabled></div><div id="accountRows"></div><button class="add" data-add="account">Add Account</button></div></article>
+      <article class="chip" data-chip="fuel"><button><span class="chip-title"><span class="dot"></span>Fuel</span><b id="fuelChip">$0.00</b></button><div class="chip-content"><div class="row two"><input id="fuelAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Fuel amount"><select id="fuelType"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div></div></article>
+      <article class="chip" data-chip="hail"><button><span class="chip-title"><span class="dot"></span>Hail Trips</span><b id="hailChip">$0.00</b></button><div class="chip-content"><div class="row two"><input id="hailTrips" type="number" min="0" inputmode="numeric" placeholder="Trip count"><input id="levyDisplay" disabled></div></div></article>
+      <article class="chip" data-chip="receipt"><button><span class="chip-title"><span class="dot"></span>Receipt Upload</span><b id="receiptChip">None</b></button><div class="chip-content"><input id="receiptFile" type="file" accept="image/*,application/pdf"><p class="muted" id="receiptName" style="font-size:12px"></p></div></article>
+    </section>
+    <div class="validate-msg" id="shareValidate"></div>
+    <button class="primary" id="shareShift">Share End of Shift</button>
+    <section class="card preview"><div id="messagePreview"></div><div class="preview-actions"><button class="secondary" id="copyMsg">Copy</button><button class="secondary" id="clearShift">Clear</button></div></section>
+  </section>
+
+  <section class="screen" data-screen="weekly">
+    <div class="subhead"><div><h2>Weekly</h2></div><button class="wk-status-toggle" id="wkStatusToggle" aria-label="Toggle status badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div>
+    <div class="wk-status" id="wkStatusBar"><span class="wk-status-label">Status</span><span class="wk-badge" id="wkBadge">—</span></div>
+    <div class="weeknav"><button id="wkPrev" aria-label="Previous week">&lsaquo;</button><span class="wklabel" id="wkLabel">Week</span><button id="wkNext" aria-label="Next week">&rsaquo;</button></div>
+    <div class="daterow"><div class="datefield"><small>From</small><input type="date" id="wkStart"></div><div class="datefield"><small>To</small><input type="date" id="wkEnd"></div></div>
+    <section class="card week-table" id="weekCapture"><div id="weekRows"></div><div class="total-row"><span class="muted">Total</span><b id="weekTotal">$0.00</b></div></section>
+    <button class="primary" id="shareWeek" style="margin:10px 0 0">Share</button>
+    <article class="chip" style="margin-top:10px"><button id="overrideToggle"><span class="chip-title"><span class="dot"></span>Add / Override Entry</span><b>+</b></button><div class="chip-content" id="overrideContent"><div class="row two"><input type="date" id="overrideDate"><input type="number" id="overrideAmount" placeholder="Amount"></div><div class="row two"><input id="overrideRego" placeholder="Rego"><button class="add" id="saveOverride">Save</button></div></div></article>
+  </section>
+
+  <section class="screen" data-screen="reports">
+    <div class="subhead"><div><h2>Reports</h2></div></div>
+    <div id="reports"></div>
+  </section>
+
+  <section class="screen" data-screen="settings">
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.8</span></div>
+
+    <div class="set-group">
+      <p class="set-group-title">Account</p>
+      <div class="set-card">
+        <button class="set-item" data-go="profile"><span class="si-label"><b>Profile &amp; Sync</b><p id="syncSummary">Local only</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
+        <div class="set-item stack"><span class="si-label"><b>WhatsApp Quick Share</b><p id="quickShareSummary">No contact set</p></span>
+          <div class="quick-share-grid"><input id="quickShareName" placeholder="Contact name"><input id="quickShareNumber" inputmode="tel" placeholder="WhatsApp number"></div>
+          <div class="quick-share-actions"><button class="secondary" id="pickQuickShare">Pick</button><button class="secondary" id="saveQuickShare">Save</button><button class="secondary" id="clearQuickShare">Clear</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <p class="set-group-title">Shift Defaults</p>
+      <div class="set-card">
+        <div class="set-item"><span class="si-label"><b>Hail Trip Levy</b><p>Per trip ($)</p></span><span class="si-control"><input id="levyRate" type="number" min="0" step="0.01"></span></div>
+        <div class="set-item"><span class="si-label"><b>Default Fuel</b><p>New shift forms</p></span><span class="si-control"><select id="defaultFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></span></div>
+        <div class="set-item stack"><span class="si-label"><b>Vehicle Regos</b><p>Shown in the shift rego dropdown</p></span>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:8px;width:100%"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters" autocomplete="off"><button class="secondary" id="addRego" style="white-space:nowrap">Add</button></div>
+          <div id="regoChips" class="rego-chips"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <p class="set-group-title">Work Week</p>
+      <div class="set-card">
+        <div class="set-item stack"><span class="si-label"><b>Week Cycle</b><p id="weekCycleHint">Thursday → Wednesday</p></span>
+          <div class="weekclock-wrap"><div class="weekclock" id="weekClock"></div><div class="wc-legend"><span><span class="wc-key s"></span><b>Start</b></span><span><span class="wc-key e"></span><b>End</b></span></div></div>
+        </div>
+        <div class="set-item"><span class="si-label"><b>Credited On</b><p>Pay milestone after week ends</p></span><span class="si-control"><select id="creditDaySelect" style="min-width:108px;max-width:140px"></select></span></div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <p class="set-group-title">App</p>
+      <div class="set-card">
+        <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
+        <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
+        <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.8 · build 2026-06-07</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="profile">
+    <div class="subhead"><div><p>Account</p><h2>Profile</h2></div><button class="pill" data-go="shift">Done</button></div>
+    <section class="card" style="padding:13px;margin-bottom:10px"><div class="row one"><input id="driverName" placeholder="Driver name"><input id="driverEmail" placeholder="Email"></div><button class="primary" id="saveProfile">Save Profile</button></section>
+    <section class="card" style="padding:13px;margin-bottom:10px">
+      <h3>Multi-device Sync</h3>
+      <!-- Sync status indicator -->
+      <div class="sync-row">
+        <span class="sync-dot idle" id="syncDot"></span>
+        <p class="mono muted" id="syncStatus" style="font-size:12px;margin:0">Sync: local</p>
+      </div>
+      <p class="muted" style="font-size:12px;margin-top:8px">Sign in with the <b>same account</b> on your iPhone and Android to keep every shift, weekly report, fuel, BAS, tax expense, hail trip and rego in sync in real time. Uses your own free Firebase project (Email/Password auth + Firestore). Works offline — changes merge automatically when you reconnect.</p>
+      <textarea id="firebaseConfig" placeholder='Firebase web config JSON {"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><input id="syncEmail" type="email" placeholder="Account email" autocomplete="username"><input id="syncPassword" type="password" placeholder="Password" autocomplete="current-password"></div>
+      <div class="preview-actions"><button class="secondary" id="signInBtn">Sign in</button><button class="secondary" id="createAccountBtn">Create account</button><button class="secondary" id="signOutBtn" style="display:none">Sign out</button></div>
+      <div class="preview-actions" style="margin-top:4px"><button class="secondary" id="disconnectFirebase">Disconnect this device</button></div>
+    </section>
+    <section class="card" style="padding:13px;margin-bottom:10px"><h3>Import Historical Totals</h3><p class="muted" style="font-size:12px">Backdate your earlier weekly sheets into the app. This safely upserts daily totals (Thu&ndash;Wed weeks recalculate automatically) &mdash; existing shifts are never wiped, only missing days are added and changed amounts amended.</p><button class="secondary" id="importHistoryBtn" style="width:100%">Preview &amp; Import</button></section>
+    <section class="card" style="padding:13px;margin-bottom:10px"><h3>Backup &amp; Restore</h3><p class="muted" style="font-size:12px">Export all local data to a JSON file, or import a previous backup. Import replaces current data.</p><div class="preview-actions"><button class="secondary" id="exportData">Export</button><button class="secondary" id="importData">Import</button></div><input type="file" id="importFile" accept="application/json,.json" style="display:none"></section>
+    <section class="card" style="padding:13px"><h3>Changelog</h3><div id="changelog" class="mono muted" style="font-size:12px;line-height:1.7"></div></section>
+  </section>
+
+  <section class="screen" data-screen="receipts">
+    <div class="subhead"><div><p>Docs archive</p><h2>Receipts</h2></div><button class="pill" data-go="settings">Back</button></div>
+    <div class="filter"><button class="pill active" data-receipt-filter="all">All</button><button class="pill" data-receipt-filter="shift">Shift Receipts</button><button class="pill" data-receipt-filter="manual">Manual</button><button class="pill" id="manualReceiptBtn">Add</button></div>
+    <input type="file" id="manualReceipt" accept="image/*,application/pdf" style="display:none">
+    <div class="receipt-grid" id="receiptGrid"></div>
+  </section>
+</main>
+
+<nav class="tabbar" aria-label="Main navigation">
+  <button data-nav="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg><span>Weekly</span></button>
+  <button data-nav="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg><span>Reports</span></button>
+  <button class="shift active" data-nav="shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17h14l-1.5-5h-11z"/><path d="M7 17v2M17 17v2M8 12l1-4h6l1 4"/></svg><span>Shift</span></button>
+  <button id="refreshTab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg><span>Refresh</span></button>
+  <button data-nav="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg><span>Settings</span></button>
+</nav>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
+<div class="sheet-overlay" id="shareSheet">
+  <div class="sheet-card" id="shareSheetCard" role="dialog" aria-modal="true" aria-label="Share shift">
+    <div class="sheet-grip" aria-hidden="true"></div>
+    <div class="sheet-title">Share shift</div>
+    <div class="sheet-sub">Log this shift to your weekly report first, or just share it now.</div>
+    <button class="sheet-btn primary" id="sheetAdd">Add to Weekly &amp; Share</button>
+    <button class="sheet-btn secondary" id="sheetSkip">Just Share</button>
+  </div>
+</div>
+
+<script type="module">
+const APP_VERSION='3.8', APP_BUILD='2026-06-07';
+const CHANGELOG=[
+  {version:'3.8',date:'07 Jun 2026',changes:['Weekly status bar gains a 3rd state: Pending (slate-blue badge) for weeks viewed ahead of the live cycle','Joins Current (amber) and Credited (green); the live week boundary is derived from your 2-pin clock cycle','Status recalculates instantly when navigating weeks forward/back, with no UI lag']},
+  {version:'3.7',date:'07 Jun 2026',changes:['Share End of Shift now opens a dual-action bottom sheet: Add to Weekly & Share (primary) or Just Share (neutral)','Add to Weekly logs the shift to the database first then opens WhatsApp in one flow; Just Share skips logging and shares instantly','Native share is held until you choose; tapping outside or swiping down cancels without clearing receipt or shift details','Both paths are guarded \u2013 if the weekly save fails it alerts and still shares rather than breaking the sequence']},
+  {version:'3.6',date:'07 Jun 2026',changes:['Stability release: hardened all state loading so a corrupted or legacy storage row (e.g. entries saved as a non-array) can no longer freeze the UI','Inbound sync values are now type-coerced before use, preventing a bad remote payload from breaking buttons or tabs','Removed dead CSS remnants from earlier Reports layouts; full nav, validation, clock and share flows re-verified end-to-end']},
+  {version:'3.5',date:'02 Jun 2026',changes:['Receipts audit now only applies to shifts logged in-app (which can carry a receipt) - imported, backdated and override entries are exempt','Old historical receipts are no longer required, so the import no longer reads as receipts outstanding']},
+  {version:'3.4',date:'02 Jun 2026',changes:['Historical import / backdating: one-tap upsert of your earlier weekly sheets (Sep 2025 \u2013 Apr 2026)','Non-destructive: only missing days are inserted and changed amounts amended; nothing is ever wiped or reset','Every row passes an isolated sanitation filter \u2013 corrupted dates/amounts are rejected individually, the rest still import','Weekly totals recalculate through a pure, isolated utility with no effect on the active week view or core state']},
+  {version:'3.3',date:'02 Jun 2026',changes:['Tax Expenses rebuilt as a distinct collapsible card - state persists across tab switches and reloads','Quick-log preset chips (Tolls, Vehicle Wash, Parking, Phone/Internet, Servicing/Parts, Tools/Supplies and more) autofill category and pop the keypad','Quick Capture: amount + chip + receipt photo in one streamlined flow; details (supplier, %, note) tuck behind a disclosure','Recurring Expense toggle (weekly/monthly) auto-populates fixed overheads into every active reporting period without re-logging','Per-item GST input tax credit shown beside the gross; live Total Tax Deductions summary feeds the global Net Revenue even while the card is collapsed']},
+  {version:'3.2',date:'02 Jun 2026',changes:['Reports tab fully redesigned: compact, high-density dashboard with a modular card grid','New live Net Revenue metric at the top (Gross minus fuel, GST set-aside and tax expenses)','Missing-receipts audit flag: amber warning on the BAS module showing how many shift receipts are still outstanding','Fuel Tracker now shows a spend-per-operational-day efficiency pill','Copy CSV and Download Report unified into one export hub that runs in the background without freezing the UI','Every module shows on-screen totals, offsets and counts; transaction logs stay hidden behind export']},
+  {version:'3.1',date:'02 Jun 2026',changes:['Reports: new BAS Quarter Quick Pull - one-tap Q1/Q2/Q3/Q4 chips for the current financial year','Tapping a quarter instantly filters BAS Gross, Fuel Tracker and Tax Expenses to that quarter\u2019s exact dates','Isolated filter: only overrides the active date range - underlying shifts, fuel, cash and expenses are untouched, and Copy CSV / Download adapt automatically']},
+  {version:'3.0',date:'02 Jun 2026',changes:['Visual clock-style week-cycle selector in Settings: two draggable pins (Start + End) on a 7-day dial','Tap a day or drag either pin - the End pin auto-locks to a complete 7-day window so an invalid/broken cycle is impossible','Works with touch on iOS/Android and pointer/mouse on desktop','The clock selection is the global calendar rule: Weekly filtering, totals and the Current/Credited status badge all follow the pinned cycle instantly']},
+  {version:'2.9',date:'02 Jun 2026',changes:['Customizable work-week cycle: pick any 7-day start (Thursday-Wednesday, Monday-Sunday, etc) in Settings','Chosen cycle is the global calendar rule - Weekly tab filtering, grouping, totals and the Reports Last-Week filter all adapt automatically','Configurable Credited pay-day: the green Credited badge now fires on your chosen milestone day after each custom week ends','Week cycle and pay-day settings sync across iPhone and Android in real time']},
+  {version:'2.8',date:'01 Jun 2026',changes:['Hardened real-time multi-device sync engine with zero-debounce immediate writes for shift saves','Network-aware sync: detects online/offline transitions and flushes queued writes on reconnect','Live sync-dot indicator in Profile (green pulsing = connected, grey = offline, red = error)','Initial join reconciliation: union-merge so neither phone loses data when a second device signs in','Echo prevention upgraded: deviceId tag + serverTimestamp guard prevents double-renders','Smart per-key refresh: only re-renders the affected screen, not the whole app','All 15 data keys covered: shifts, weekly, fuel, trips, cash, expenses, messages, snapshots, regos, quickShare, profile, levy, fuelDefault, lastRego, timezone','Firebase offline persistence enabled (multi-tab safe) — full offline operation guaranteed']},
+  {version:'2.7',date:'01 Jun 2026',changes:['Real-time multi-device sync: sign in with the same account on iPhone and Android','Every module syncs live - shifts, weekly, fuel, BAS, tax expenses, hail trips, regos and settings','Offline-safe: changes cache locally and merge on reconnect (last-write-wins, union merge on first connect)']},
+  {version:'2.6',date:'31 May 2026',changes:['New shift message format with emojis and weekday date','Per-line icons (EOS, Cash, Run (n), Accounts, Fuel); payer amounts show cents','Total relabelled TOTAL EARNINGS; empty lines hidden']},
+  {version:'2.5',date:'31 May 2026',changes:['Redesigned top profile bar: fully theme-variable driven','Compact, premium layout with rounded avatar and pill weather/time widget','Sun/moon theme toggle and weather icon adapt automatically to light/dark']},
+  {version:'2.4',date:'31 May 2026',changes:['Restored full report modules: BAS Gross, Cash Income, Hail Trips, Fuel Tracker, Tax Expenses','Modules now driven by the date pickers + quick filters','Added All Time quick filter for cumulative lifetime totals']},
+  {version:'2.0',date:'28 May 2025',changes:['Gold / black / white redesign','Mobile-first single HTML PWA','Firebase-ready sync layer','Receipts archive and reports']}
+];
+const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',expenses:'d2e_expenses_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',levy:'d2e_levy_rate',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState',snapshots:'d2e_shift_snapshots_v1',weekStartDay:'d2e_week_start_day',creditDay:'d2e_credit_day'};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const money=v=>'$'+(Number(v)||0).toFixed(2);
+const n=v=>{const x=Number(v); return isFinite(x)?x:0};
+const nn=v=>Math.max(0,n(v));
+const uid=()=>(self.crypto&&crypto.randomUUID)?crypto.randomUUID():'id-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
+const load=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}};
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('Storage full - clear old receipts')} autoSync(k)};
+const localDateStr=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const parseLocal=s=>{const [y,m,d]=String(s).split('-').map(Number);return new Date(y,(m||1)-1,d||1)};
+const fmtDate=s=>parseLocal(s).toLocaleDateString('en-AU',{weekday:'short',day:'2-digit',month:'short'});
+const ddmmyyyy=s=>parseLocal(s).toLocaleDateString('en-AU',{day:'2-digit',month:'2-digit',year:'numeric'});
+const csvCell=v=>{let s=String(v??''); if(/^[=+\-@\t\r]/.test(s))s="'"+s; return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* Defensive loaders — guarantee the correct type/shape no matter what is in storage,
+   so a corrupted or legacy row can never crash a render (.filter/.map/.push etc). */
+const loadArr=(k)=>{const v=load(k,[]);return Array.isArray(v)?v.filter(x=>x!=null):[]};
+const loadObj=(k)=>{const v=load(k,{});return (v&&typeof v==='object'&&!Array.isArray(v))?v:{}};
+let state={entries:loadArr(KEYS.entries),weekly:loadObj(KEYS.weekly),fuel:loadObj(KEYS.fuel),trip:loadObj(KEYS.trip),cash:loadObj(KEYS.cash),receipts:loadObj(KEYS.receipts),expenses:loadArr(KEYS.expenses),messages:loadObj(KEYS.messages),quickShare:(()=>{const q=load(KEYS.quickShare,{name:'',number:''});return (q&&typeof q==='object'&&!Array.isArray(q))?{name:q.name||'',number:q.number||''}:{name:'',number:''}})(),regos:(()=>{const r=loadArr(KEYS.regos).filter(x=>typeof x==='string'&&x.trim());return r.length?r:['ABC 123']})(),profile:(()=>{const p=load(KEYS.profile,{name:'Driver',email:''});return (p&&typeof p==='object'&&!Array.isArray(p))?{name:p.name||'Driver',email:p.email||''}:{name:'Driver',email:''}})(),snapshots:loadObj(KEYS.snapshots),weekOffset:0,receiptFilter:'all',firebase:null};
+let calc=load(KEYS.shift,{date:localDateStr(new Date()),rego:localStorage.getItem(KEYS.lastRego)||state.regos[0]||'',eos:[0],cash:[{name:'',amount:0}],runs:0,accounts:[],fuelAmount:0,fuelType:localStorage.getItem(KEYS.fuelDefault)||'Diesel',hailTrips:''});
+if(!Array.isArray(calc.eos)||!calc.eos.length)calc.eos=[0];
+if(!Array.isArray(calc.cash)||!calc.cash.length)calc.cash=[{name:'',amount:0}];
+if(!Array.isArray(calc.accounts))calc.accounts=[];
+let userId;
+
+// =====================================================================
+// REAL-TIME MULTI-DEVICE SYNC ENGINE v2.8
+// ─────────────────────────────────────────────────────────────────────
+// Architecture:
+//   • Firestore: accounts/{uid}/data/{key}  (one doc per data key)
+//   • Offline persistence: persistentLocalCache (IndexedDB-backed)
+//   • Conflict resolution: last-write-wins via serverTimestamp
+//   • Initial join: union-merge — neither device loses data
+//   • Echo prevention: _deviceId + timestamp guard
+//   • Network awareness: online/offline events flush pending writes
+//   • immediateSync() = zero-debounce (shift saves, rego changes)
+//   • autoSync()      = 150ms debounce (all other saves)
+// =====================================================================
+
+const SYNC_DATA_KEYS=[KEYS.entries,KEYS.weekly,KEYS.fuel,KEYS.trip,KEYS.cash,KEYS.expenses,KEYS.messages,KEYS.snapshots,KEYS.regos,KEYS.quickShare,KEYS.profile];
+const SYNC_SETTING_KEYS=[KEYS.levy,KEYS.fuelDefault,KEYS.lastRego,KEYS.tz,KEYS.weekStartDay,KEYS.creditDay];
+const SYNC_KEYS=[...SYNC_DATA_KEYS,...SYNC_SETTING_KEYS];
+const KEY_TO_STATE={[KEYS.entries]:'entries',[KEYS.weekly]:'weekly',[KEYS.fuel]:'fuel',[KEYS.trip]:'trip',[KEYS.cash]:'cash',[KEYS.expenses]:'expenses',[KEYS.messages]:'messages',[KEYS.snapshots]:'snapshots',[KEYS.regos]:'regos',[KEYS.quickShare]:'quickShare',[KEYS.profile]:'profile'};
+
+let fb={app:null,auth:null,db:null,fns:null,authFns:null};
+let syncOn=false, unsub=[], pushTimers={}, immediateQueue=new Set();
+let syncMeta=load('d2e_sync_meta',{});
+let netOnline=navigator.onLine;
+
+// ── Device identity ───────────────────────────────────────────────────
+function deviceId(){
+  let id=localStorage.getItem(KEYS.device);
+  if(!id){id=uid();localStorage.setItem(KEYS.device,id);}
+  return id;
+}
+
+// ── Sync status UI ────────────────────────────────────────────────────
+function setSyncStatus(s){
+  const el=$('#syncStatus'); if(el)el.textContent='Sync: '+s;
+  const dot=$('#syncDot');
+  if(dot){
+    dot.className='sync-dot';
+    if(s==='live')dot.classList.add('live');
+    else if(s.includes('error'))dot.classList.add('error');
+    else dot.classList.add('idle');
+  }
+  const sum=$('#syncSummary');
+  if(sum)sum.textContent=(syncOn&&userId)?'Firebase \u2022 Real-time':'Local only';
+}
+
+// ── Read local value for any key (state object or localStorage) ───────
+function localValueFor(key){
+  const p=KEY_TO_STATE[key];
+  return p!==undefined?state[p]:localStorage.getItem(key);
+}
+
+// ── Persist a remote value WITHOUT triggering another push (no echo) ──
+function rawPersist(key,value){
+  const p=KEY_TO_STATE[key];
+  try{
+    if(p!==undefined){
+      // Coerce to the shape this state field must have so a corrupt remote payload can't crash the UI
+      const arrayKeys=[KEYS.entries,KEYS.expenses,KEYS.regos];
+      if(arrayKeys.indexOf(key)>=0) value=Array.isArray(value)?value.filter(x=>x!=null):[];
+      else if(value==null||typeof value!=='object'||Array.isArray(value)) value={};
+      state[p]=value; localStorage.setItem(key,JSON.stringify(value));
+    }
+    else{if(value==null)localStorage.removeItem(key);else localStorage.setItem(key,typeof value==='string'?value:String(value));}
+  }catch(e){}
+}
+
+// ── Write one key to Firestore (called by push queue) ─────────────────
+async function cloudWrite(key){
+  if(!syncOn||!fb.db||!userId||!fb.fns)return;
+  const value=localValueFor(key);
+  try{
+    await fb.fns.setDoc(
+      fb.fns.doc(fb.db,'accounts',userId,'data',key),
+      {value,_deviceId:deviceId(),updatedAt:fb.fns.serverTimestamp()}
+    );
+    setSyncStatus('live');
+  }catch(e){
+    setSyncStatus('offline \u2013 queued');
+    // Firestore offline persistence will automatically retry when back online
+  }
+}
+
+// ── Push queue: immediate (0ms) or debounced (150ms) ─────────────────
+function queuePush(key,immediate=false){
+  if(!syncOn||SYNC_KEYS.indexOf(key)<0)return;
+  if(immediate){
+    clearTimeout(pushTimers[key]);
+    delete pushTimers[key];
+    immediateQueue.add(key);
+    cloudWrite(key).finally(()=>immediateQueue.delete(key));
+  }else{
+    if(immediateQueue.has(key))return; // already in-flight, skip debounce
+    clearTimeout(pushTimers[key]);
+    pushTimers[key]=setTimeout(()=>cloudWrite(key),150);
+  }
+}
+
+// ── Public API: called from save() and saveShift() ────────────────────
+function autoSync(k){queuePush(k,false);}
+function immediateSync(k){queuePush(k,true);}
+
+// ── setLS: write a setting to localStorage + push to cloud ───────────
+function setLS(key,val){
+  if(val==null)localStorage.removeItem(key);
+  else localStorage.setItem(key,val);
+  queuePush(key,false);
+}
+
+// ── Convert Firestore timestamp to epoch ms ───────────────────────────
+function tsMillis(u){
+  if(!u)return 0;
+  if(typeof u.toMillis==='function')return u.toMillis();
+  if(u.seconds)return u.seconds*1000+(u.nanoseconds||0)/1e6;
+  const nn=Date.parse(u); return isFinite(nn)?nn:0;
+}
+
+// ── Apply incoming remote snapshot (last-write-wins + echo guard) ─────
+function applyRemote(key,data,hasPendingWrites){
+  if(!data)return;
+  // hasPendingWrites = this is our own write reflected from the local cache
+  if(hasPendingWrites)return;
+  const ts=tsMillis(data.updatedAt), prev=syncMeta[key]||0;
+  // Echo: our own device's write reflected back with same or older timestamp
+  if(data._deviceId===deviceId()&&ts&&ts<=prev)return;
+  // Last-write-wins: we have a strictly newer confirmed value
+  if(ts&&prev&&ts<prev)return;
+  rawPersist(key,data.value);
+  syncMeta[key]=ts||Date.now();
+  try{localStorage.setItem('d2e_sync_meta',JSON.stringify(syncMeta));}catch(e){}
+  refreshAfterSync(key);
+}
+
+// ── Smart re-render: only touch the screen that changed ───────────────
+function refreshAfterSync(key){
+  const active=document.querySelector('.screen.active');
+  const scr=active&&active.dataset.screen;
+  // Always refresh rego options and the shift calc (cheap, always needed)
+  try{renderRegoOptions();renderRegoChips();}catch(e){}
+  try{renderRows();renderCalc();}catch(e){}
+  // Screen-specific re-renders
+  try{if(scr==='reports')renderReports();}catch(e){}
+  try{if(scr==='weekly')renderWeekly();}catch(e){}
+  try{if(scr==='settings')renderSettings();}catch(e){}
+  try{if(scr==='profile')renderProfile();}catch(e){}
+  try{if(scr==='receipts')renderReceipts();}catch(e){}
+}
+
+// ── Union-merge local + cloud on first device join ────────────────────
+// Neither side loses data; cloud wins on scalar conflicts
+function mergeValues(key,localV,cloudV){
+  if(cloudV==null)return localV;
+  if(localV==null)return cloudV;
+  if(key===KEYS.entries){
+    // Array of shift objects — union by date+rego key
+    const m={};
+    (localV||[]).forEach(e=>e&&(m[e.date+'|'+(e.rego||'')]=e));
+    (cloudV||[]).forEach(e=>e&&(m[e.date+'|'+(e.rego||'')]=e));
+    return Object.values(m);
+  }
+  if(key===KEYS.expenses){
+    // Array of expense objects — union by id
+    const m={};
+    (localV||[]).forEach(e=>e&&e.id&&(m[e.id]=e));
+    (cloudV||[]).forEach(e=>e&&e.id&&(m[e.id]=e));
+    return Object.values(m);
+  }
+  if(key===KEYS.regos){
+    // String array — deduplicated union
+    const out=[],seen={};
+    [...(localV||[]),...(cloudV||[])].forEach(r=>{
+      const k=String(r).toLowerCase();
+      if(!seen[k]){seen[k]=1;out.push(r);}
+    });
+    return out;
+  }
+  if(Array.isArray(cloudV))return cloudV;
+  if(typeof cloudV==='object'&&cloudV!==null&&typeof localV==='object'&&localV!==null)
+    return Object.assign({},localV,cloudV); // object maps: union keys, cloud wins on collision
+  return cloudV; // scalar settings: cloud value wins
+}
+
+// ── One-time reconciliation when a device joins/rejoins an account ────
+async function reconcile(){
+  if(!fb.db||!userId||!fb.fns)return;
+  setSyncStatus('merging\u2026');
+  for(const key of SYNC_KEYS){
+    try{
+      const ref=fb.fns.doc(fb.db,'accounts',userId,'data',key);
+      const snap=await fb.fns.getDoc(ref);
+      const exists=typeof snap.exists==='function'?snap.exists():snap.exists;
+      const cloudV=exists?(snap.data&&snap.data()||{}).value:undefined;
+      const merged=mergeValues(key,localValueFor(key),cloudV);
+      rawPersist(key,merged);
+      // Push merged value so cloud reflects the union too
+      await fb.fns.setDoc(ref,{value:localValueFor(key),_deviceId:deviceId(),updatedAt:fb.fns.serverTimestamp()});
+      syncMeta[key]=Date.now();
+    }catch(e){}
+  }
+  try{localStorage.setItem('d2e_sync_meta',JSON.stringify(syncMeta));}catch(e){}
+  refreshAfterSync('*');
+}
+
+// ── Attach real-time Firestore listeners (one per SYNC_KEY) ──────────
+function attachListeners(){
+  detachListeners();
+  if(!fb.db||!userId||!fb.fns)return;
+  SYNC_KEYS.forEach(key=>{
+    try{
+      const ref=fb.fns.doc(fb.db,'accounts',userId,'data',key);
+      const u=fb.fns.onSnapshot(
+        ref,
+        snap=>{
+          try{
+            if(!snap)return;
+            const exists=typeof snap.exists==='function'?snap.exists():snap.exists;
+            const meta=snap.metadata||{};
+            if(!exists){
+              // Key missing from cloud — push our local value up immediately
+              if(localValueFor(key)!=null&&!meta.hasPendingWrites)queuePush(key,true);
+              return;
+            }
+            applyRemote(key,snap.data&&snap.data(),meta.hasPendingWrites);
+          }catch(e){}
+        },
+        ()=>setSyncStatus('listener error')
+      );
+      unsub.push(u);
+    }catch(e){}
+  });
+}
+function detachListeners(){unsub.forEach(u=>{try{u&&u();}catch(e){}});unsub=[];}
+
+// ── Network awareness: flush pending writes when connectivity returns ──
+window.addEventListener('online',()=>{
+  netOnline=true;
+  setSyncStatus('reconnecting\u2026');
+  if(syncOn&&userId){
+    // Re-push all keys — Firestore queues failed writes, but this
+    // ensures settings (non-Firestore-tracked) also get flushed
+    SYNC_KEYS.forEach(k=>queuePush(k,false));
+    setSyncStatus('live');
+  }
+});
+window.addEventListener('offline',()=>{
+  netOnline=false;
+  setSyncStatus('offline \u2013 changes saved locally');
+});
+
+// ── Firebase SDK init (dynamic import, zero cost when not configured) ─
+async function initFirebase(cfg){
+  const [appMod,authMod,fsMod]=await Promise.all([
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'),
+  ]);
+  // Reuse existing app if already initialized (handles hot-reload)
+  try{fb.app=appMod.getApp();}catch{fb.app=appMod.initializeApp(cfg);}
+  fb.auth=authMod.getAuth(fb.app);
+  // Enable offline persistence with multi-tab support
+  try{
+    fb.db=fsMod.initializeFirestore(fb.app,{
+      localCache:fsMod.persistentLocalCache({
+        tabManager:fsMod.persistentMultipleTabManager?fsMod.persistentMultipleTabManager():undefined
+      })
+    });
+  }catch(e){try{fb.db=fsMod.getFirestore(fb.app);}catch(_){}}
+  fb.fns={doc:fsMod.doc,setDoc:fsMod.setDoc,getDoc:fsMod.getDoc,onSnapshot:fsMod.onSnapshot,serverTimestamp:fsMod.serverTimestamp};
+  fb.authFns={signIn:authMod.signInWithEmailAndPassword,signUp:authMod.createUserWithEmailAndPassword,signOut:authMod.signOut};
+  // Persist auth session across reloads / app restarts
+  try{await authMod.setPersistence(fb.auth,authMod.browserLocalPersistence);}catch(e){}
+  // Auth state observer — fires immediately on load if session is restored
+  authMod.onAuthStateChanged(fb.auth,async user=>{
+    if(user){
+      userId=user.uid; syncOn=true;
+      if(user.email)localStorage.setItem('d2e_sync_email',user.email);
+      setSyncStatus('connecting\u2026');
+      try{await reconcile();}catch(e){}
+      attachListeners();
+      setSyncStatus('live');
+    }else{
+      userId=null; syncOn=false;
+      detachListeners();
+      setSyncStatus('signed out');
+    }
+    updateSyncUI();
+  });
+}
+
+// ── Auth actions ──────────────────────────────────────────────────────
+async function connectAndSignIn(create){
+  let cfg;
+  try{cfg=JSON.parse($('#firebaseConfig').value);}
+  catch(e){toast('Invalid Firebase config JSON');return;}
+  const email=($('#syncEmail').value||'').trim(), pass=$('#syncPassword').value||'';
+  if(!email||!pass){toast('Enter email and password');return;}
+  localStorage.setItem(KEYS.fb,JSON.stringify(cfg));
+  try{
+    if(!fb.app)await initFirebase(cfg);
+    if(create)await fb.authFns.signUp(fb.auth,email,pass);
+    else       await fb.authFns.signIn(fb.auth,email,pass);
+    localStorage.setItem('d2e_sync_email',email);
+    toast(create?'Account created \u2013 syncing\u2026':'Signed in \u2013 syncing\u2026');
+  }catch(e){toast('Sign-in failed: '+(e&&(e.code||e.message)||'error'));setSyncStatus('error');}
+}
+function signOutSync(){
+  try{fb.authFns&&fb.auth&&fb.authFns.signOut(fb.auth);}catch(e){}
+  detachListeners(); userId=null; syncOn=false;
+  setSyncStatus('signed out'); updateSyncUI();
+  toast('Signed out \u2013 data stays on this device');
+}
+function disconnectFirebase(){
+  signOutSync(); localStorage.removeItem(KEYS.fb);
+  fb={app:null,auth:null,db:null,fns:null,authFns:null};
+  toast('Sync disconnected');
+}
+function updateSyncUI(){
+  const on=!!userId;
+  const si=$('#signInBtn'),ca=$('#createAccountBtn'),so=$('#signOutBtn');
+  if(si)si.style.display=on?'none':'';
+  if(ca)ca.style.display=on?'none':'';
+  if(so)so.style.display=on?'':'none';
+  setSyncStatus(on?'live':'local');
+  try{renderSettings();}catch(e){}
+}
+
+// ── Boot: auto-restore Firebase session if config is stored ──────────
+(async()=>{
+  const raw=localStorage.getItem(KEYS.fb);
+  if(raw){
+    try{setSyncStatus('restoring\u2026');await initFirebase(JSON.parse(raw));}
+    catch(e){setSyncStatus('session error');}
+  }
+})();
+
+// ── Test hook (unit testing with mock backend) ────────────────────────
+window.__sync={
+  get on(){return syncOn;},set on(v){syncOn=v;},
+  setUser:u=>{userId=u;},setBackend:b=>{fb=b;},
+  deviceId,applyRemote,queuePush,cloudWrite,mergeValues,
+  reconcile,attachListeners,detachListeners,refreshAfterSync,
+  localValueFor,SYNC_KEYS,KEY_TO_STATE,
+  meta:()=>syncMeta,setMeta:(k,v)=>{syncMeta[k]=v;}
+};
+
+// =====================================================================
+// END SYNC ENGINE
+// =====================================================================
+
+const EXPENSE_CATEGORIES=['Fuel','Car wash/detailing','Taxi lease/bailee fee','Taxi network/base fees','Booking/platform fees','Tolls','Parking','Airport fees','Vehicle registration','CTP/insurance','Repairs and maintenance','Tyres','Servicing','Oil/coolant/AdBlue','Phone plan','Mobile phone accessories','GPS/navigation','Dash cam','Cleaning supplies','Uniform/work clothing','Accounting/bookkeeping','Bank fees','E-tag fees','Safety equipment','First aid kit','Depreciating asset','Other'];
+/* Quick-log preset chips mapped to existing categories (keeps BAS/CSV logic intact). gst=true means the item carries GST. */
+const EXPENSE_PRESETS=[
+  {label:'Tolls',cat:'Tolls',gst:true},
+  {label:'Vehicle Wash',cat:'Car wash/detailing',gst:true},
+  {label:'Parking',cat:'Parking',gst:true},
+  {label:'Phone/Internet',cat:'Phone plan',gst:true},
+  {label:'Servicing/Parts',cat:'Repairs and maintenance',gst:true},
+  {label:'Tools/Supplies',cat:'Cleaning supplies',gst:true},
+  {label:'Insurance',cat:'CTP/insurance',gst:true},
+  {label:'Rego',cat:'Vehicle registration',gst:false}
+];
+/* Transient draft for the quick-capture form (survives re-renders within a session). */
+let expDraft={category:'',gstIncluded:true,recurring:false,frequency:'monthly',moreOpen:false,detailsOpen:false};
+
+function toast(t){const el=$('#toast');if(!el)return;el.textContent=t;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2200)}
+function confirmBox(title,text,ok,okLabel,cancelLabel){$('#modalTitle').textContent=title;$('#modalText').className='muted';$('#modalText').textContent=text;$('#modalCancel').textContent=cancelLabel||'Cancel';$('#modalOk').textContent=okLabel||'OK';$('#modalCancel').onclick=()=>$('#modal').classList.remove('show');$('#modal').classList.add('show');$('#modalOk').onclick=()=>{$('#modal').classList.remove('show');ok&&ok();};}
+function renderRegoOptions(){const sel=$('#regoSelect');if(!sel)return;const list=state.regos.slice();if(calc.rego&&!list.includes(calc.rego))list.unshift(calc.rego);sel.innerHTML=list.length?list.map(r=>`<option value="${esc(r)}"${r===calc.rego?' selected':''}>${esc(r)}</option>`).join(''):'<option value="">No regos - add in Settings</option>';}
+function renderRegoChips(){const box=$('#regoChips');if(!box)return;box.innerHTML=state.regos.map(r=>`<span class="rego-chip">${esc(r)}<button data-del-rego="${esc(r)}" aria-label="Remove ${esc(r)}">&times;</button></span>`).join('')||'<span class="muted" style="font-size:12px">No saved regos yet</span>';}
+$('#modalCancel').onclick=()=>$('#modal').classList.remove('show');
+$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};
+function shiftKey(date,rego){return `${date}|${rego||''}`}
+function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem(KEYS.theme,t);$('#darkSwitch')?.classList.toggle('active',t==='dark');$('#lightSwitch')?.classList.toggle('active',t==='light')}
+setTheme(localStorage.getItem(KEYS.theme)||'dark');
+
+function show(screen){$$('.screen').forEach(x=>x.classList.toggle('active',x.dataset.screen===screen));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===screen)); if(screen==='weekly') renderWeekly(); if(screen==='reports') renderReports(); if(screen==='settings') renderSettings(); if(screen==='receipts') renderReceipts(); if(screen==='profile') renderProfile(); window.scrollTo({top:0,behavior:'smooth'})}
+$$('[data-nav]').forEach(b=>b.onclick=()=>show(b.dataset.nav));$$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
+$('#refreshTab').onclick=()=>confirmBox('Refresh app','Clear calculator cache and hard reload? Saved shifts, expenses and receipts are kept.',()=>{localStorage.removeItem(KEYS.shift);location.reload()});
+$('#refreshApp').onclick=$('#refreshTab').onclick;
+
+function renderRows(){
+  $('#eosRows').innerHTML=calc.eos.map((v,i)=>`<div class="row"><input type="text" value="EOS ${i+1}" disabled><input data-eos="${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${v||''}" placeholder="Amount"><button class="mini" data-del-eos="${i}" aria-label="Remove">x</button></div>`).join('');
+  $('#cashRows').innerHTML=calc.cash.map((r,i)=>`<div class="row"><input data-cash-name="${i}" maxlength="40" value="${esc(r.name)}" placeholder="Payer"><input data-cash-amount="${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${r.amount||''}" placeholder="Amount"><button class="mini" data-del-cash="${i}" aria-label="Remove">x</button></div>`).join('');
+  $('#accountRows').innerHTML=calc.accounts.map((r,i)=>`<div class="row"><input data-account-name="${i}" maxlength="40" value="${esc(r.name)}" placeholder="Account name"><input data-account-amount="${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${r.amount||''}" placeholder="Amount"><button class="mini" data-del-account="${i}" aria-label="Remove">x</button></div>`).join('');
+  $('#runCount').value=calc.runs||''; $('#fuelAmount').value=calc.fuelAmount||''; $('#fuelType').value=calc.fuelType; $('#hailTrips').value=calc.hailTrips; $('#shiftDate').value=calc.date;
+}
+function totals(){
+  const eos=calc.eos.reduce((a,b)=>a+nn(b),0), cash=calc.cash.reduce((a,b)=>a+nn(b.amount),0), runs=nn(calc.runs)*5, accounts=calc.accounts.reduce((a,b)=>a+nn(b.amount),0), fuel=nn(calc.fuelAmount), gross=eos+cash+runs+accounts, take=gross*.55-cash+fuel, levy=nn(calc.hailTrips)*n(localStorage.getItem(KEYS.levy)||'1.20');
+  return {eos,cash,runs,accounts,fuel,gross,take,levy};
+}
+function message(){
+  const t=totals();
+  const cashBits=calc.cash.filter(x=>nn(x.amount)>0).map(x=>`${x.name||'Cash'} ${money(nn(x.amount))}`).join(', ');
+  const acctBits=calc.accounts.filter(x=>nn(x.amount)>0).map(x=>`${x.name||'Account'} ${money(nn(x.amount))}`).join(', ');
+  const lines=[];
+  if(t.eos>0) lines.push(`💳 *EOS:* ${money(t.eos)}`);
+  if(t.cash>0) lines.push(`💵 *Cash:* ${money(t.cash)}${cashBits?' ('+cashBits+')':''}`);
+  if(nn(calc.runs)>0) lines.push(`🚗 *Run (${nn(calc.runs)}):* ${money(t.runs)}`);
+  if(t.accounts>0) lines.push(`🧾 *Accounts:* ${money(t.accounts)}${acctBits?' ('+acctBits+')':''}`);
+  if(t.fuel>0) lines.push(`⛽ *${calc.fuelType}:* ${money(t.fuel)}`);
+  let day=''; try{day=parseLocal(calc.date).toLocaleDateString('en-AU',{weekday:'short'})+' '}catch{}
+  const body=lines.join('\n');
+  return `*Shift Report: ${day}${ddmmyyyy(calc.date)}*\n🚐 *Rego: ${calc.rego||'Not set'}*${body?'\n\n'+body:''}\n\n💰 *TOTAL EARNINGS: ${money(t.take)}*`;
+}
+function shiftPreviewForEntry(entry){
+  const exact=state.messages[shiftKey(entry.date,entry.rego)];
+  if(exact)return exact;
+  const cash=state.cash[entry.date], fuel=state.fuel[entry.date], trips=nn(state.trip[entry.date]), rate=n(localStorage.getItem(KEYS.levy)||'1.20');
+  const cashBits=cash?.payers?.length?' ('+cash.payers.map(p=>`${p.name||'Cash'} $${nn(p.amount).toFixed(0)}`).join(', ')+')':'';
+  return `*Shift Report: ${ddmmyyyy(entry.date)}*\n*Rego: ${entry.rego||'Not set'}*\n*Cash:* ${money(cash?.total||0)}${cashBits}\n*${fuel?.type||'Fuel'}:* ${money(fuel?.amount||0)}\n*Hail Levy (private):* ${money(trips*rate)} (${trips} trips)\n*Total Amount: ${money(entry.amount)}*\n\nSaved before exact shift preview messages were enabled.`;
+}
+function normalisePhone(v){let s=String(v||'').trim().replace(/[^\d+]/g,''); if(s.startsWith('+'))s=s.slice(1); if(s.startsWith('0'))s='61'+s.slice(1); return s}
+function quickContact(){const number=normalisePhone(state.quickShare.number); return number?{name:state.quickShare.name||'Quick contact',number}:null}
+function whatsappUrl(text){const c=quickContact(); return `https://wa.me/${c?c.number:''}?text=${encodeURIComponent(text)}`}
+async function shareText(text){const c=quickContact(); if(c){try{await navigator.clipboard.writeText(text)}catch{} location.href=whatsappUrl(text); toast(`Opening WhatsApp for ${c.name}`); return} try{if(navigator.share) await navigator.share({text}); else location.href=whatsappUrl(text)}catch{try{location.href=whatsappUrl(text)}catch{}}}
+function downloadText(filename,text,type='text/csv'){try{const blob=new Blob([text],{type}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500)}catch{toast('Download unavailable')}}
+function downloadBlob(file){try{const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download=file.name||'image.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}catch{}}
+function dataUrlToFile(dataUrl,name){
+  try{const i=String(dataUrl).indexOf(','); const meta=dataUrl.slice(0,i), b64=dataUrl.slice(i+1); const mime=(meta.match(/data:([^;]+)/)||[])[1]||'image/jpeg'; const bin=atob(b64), len=bin.length, arr=new Uint8Array(len); for(let j=0;j<len;j++)arr[j]=bin.charCodeAt(j); const ext=mime.includes('pdf')?'.pdf':(mime.includes('png')?'.png':'.jpg'); return new File([arr], (name||'receipt')+(/\.[a-z0-9]+$/i.test(name||'')?'':ext), {type:mime});}
+  catch{return null}
+}
+async function shiftReceiptFile(){
+  const f=$('#receiptFile')&&$('#receiptFile').files[0]; if(f)return f;
+  const arr=(state.receipts&&state.receipts[calc.date])||[];
+  for(let k=arr.length-1;k>=0;k--){ if(arr[k]&&arr[k].fileData)return dataUrlToFile(arr[k].fileData,arr[k].fileName); }
+  return null;
+}
+async function captureCard(el,filename){ if(!window.html2canvas||!el)return null; try{const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#0b0b0b',removeContainer:true}); return await new Promise(res=>canvas.toBlob(b=>res(b?new File([b],filename,{type:'image/png'}):null),'image/png'));}catch(e){return null} }
+async function shareFileAndText(file,text){
+  if(file&&navigator.share&&navigator.canShare?.({files:[file]})){
+    try{await navigator.share({text,files:[file]});return}
+    catch(e){if(e&&e.name==='AbortError')return}
+  }
+  if(navigator.share&&!quickContact()){
+    try{await navigator.share({text}); if(file){downloadBlob(file);toast('Image saved to attach')} return}
+    catch(e){if(e&&e.name==='AbortError')return}
+  }
+  const c=quickContact();
+  try{await navigator.clipboard.writeText(text)}catch{}
+  if(file)downloadBlob(file);
+  try{location.href=whatsappUrl(text)}catch{}
+  toast(file?(c?`Image saved + WhatsApp opening for ${c.name}`:'Image saved - attach it in WhatsApp'):(c?`Opening WhatsApp for ${c.name}`:'Opening WhatsApp'));
+}
+function buildWeekShareCard(){
+  const rows=weekEntries(), total=rows.reduce((a,b)=>a+n(b.amount),0);
+  const rowsHtml=rows.map(r=>`<div style="display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:baseline;padding:11px 0;border-bottom:1px solid #1c1c1c;font-size:17px"><span style="color:#cdbf9f">${esc(fmtDate(r.date))}</span><span style="color:#8c8068">${esc(r.rego||'')}</span><span style="color:#f0c040;font-weight:700;text-align:right;font-variant-numeric:tabular-nums">${money(r.amount)}</span></div>`).join('')||`<div style="color:#8c8068;padding:14px 0;font-size:16px">No shifts in this range</div>`;
+  const wrap=document.createElement('div'); wrap.style.cssText='position:fixed;left:-9999px;top:0;z-index:-1';
+  wrap.innerHTML=`<div style="width:520px;padding:28px 32px;background:#0b0b0b;color:#f5f0e8;font-family:Outfit,system-ui,sans-serif;border-radius:18px;box-sizing:border-box"><div style="font-size:13px;color:#8c8068;margin-bottom:14px;letter-spacing:.3px">${esc(wkLabel())}</div>${rowsHtml}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:2px solid #2a2a2a"><span style="font-size:14px;color:#a89878;text-transform:uppercase;letter-spacing:1px">Total</span><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;color:#f0c040;font-variant-numeric:tabular-nums">${money(total)}</span></div></div>`;
+  document.body.appendChild(wrap); return {card:wrap.firstElementChild, cleanup:()=>wrap.remove()};
+}
+function weekShareText(){const rows=weekEntries(); const total=rows.reduce((a,b)=>a+n(b.amount),0); return `${wkLabel()}\n*Total Amount: ${money(total)}*`}
+function basQuarter(dateStr){const d=parseLocal(dateStr), y=d.getFullYear(), m=d.getMonth()+1; const fyStart=m>=7?y:y-1, fy=`FY${fyStart}-${String(fyStart+1).slice(2)}`; if(m>=7&&m<=9)return `${fy} Q1 (Jul-Sep)`; if(m>=10&&m<=12)return `${fy} Q2 (Oct-Dec)`; if(m>=1&&m<=3)return `${fy} Q3 (Jan-Mar)`; return `${fy} Q4 (Apr-Jun)`}
+function expenseGst(e){return e.gstIncluded?n(e.amount)/11*(n(e.businessUse||100)/100):0}
+function expenseDeductible(e){return n(e.amount)*(n(e.businessUse||100)/100)}
+function expenseAttachmentLabel(e){return e.attachment?.fileName||'No attachment'}
+/* Recurring-aware expansion: returns the expense INSTANCES that fall inside the active
+   report period. Recurring templates are expanded into virtual occurrences (stepping
+   weekly/monthly from their anchor date) WITHOUT ever duplicating rows in state.expenses —
+   so the underlying data stays a single source of truth and cannot be corrupted. */
+function expandExpenses(){
+  try{
+    const allTime=!!state.repAllTime, lo=state.repStart, hi=state.repEnd, today=localDateStr(new Date());
+    const out=[];
+    for(const e of (state.expenses||[])){
+      if(!e||!e.date)continue;
+      if(!e.recurring){
+        if(allTime || (lo&&hi&&e.date>=lo&&e.date<=hi)) out.push(Object.assign({},e,{_baseId:e.id}));
+        continue;
+      }
+      const upper=allTime?today:(hi||today);
+      let d=parseLocal(e.date), guard=0;
+      while(guard++<600){
+        const ds=localDateStr(d);
+        if(ds>upper)break;
+        if(allTime || (lo&&hi&&ds>=lo&&ds<=hi)) out.push(Object.assign({},e,{date:ds,_recurring:true,_baseId:e.id,id:e.id+'@'+ds}));
+        if(e.frequency==='weekly')d.setDate(d.getDate()+7); else d.setMonth(d.getMonth()+1);
+      }
+    }
+    return out;
+  }catch(err){ return (state.expenses||[]).filter(e=>e&&e.date&&repMatch(e.date)); }
+}
+async function fileToData(file){return await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
+async function compressImage(file){if(!file.type||!file.type.startsWith('image/'))return fileToData(file);try{const dataUrl=await fileToData(file);const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=dataUrl});const max=1280,scale=Math.min(1,max/Math.max(img.width||max,img.height||max));const w=Math.round((img.width||max)*scale),h=Math.round((img.height||max)*scale);const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);return c.toDataURL('image/jpeg',0.7)}catch{return fileToData(file)}}
+async function prepMedia(file){const isImg=file.type&&file.type.startsWith('image/');if(!isImg&&file.size>2000000){toast('PDF too large (max 2MB)');return null}if(file.size>10000000){toast('File too large (max 10MB)');return null}try{const data=await compressImage(file);if(data&&data.length>2800000){toast('File too large to store');return null}return data}catch{toast('Could not read file');return null}}
+
+function renderCalc(){
+  const t=totals(), runsAcc=t.runs+t.accounts, max=Math.max(t.eos+t.cash+runsAcc+t.fuel,1);
+  $('#takeHome').textContent=money(t.take); $('#formula').textContent=`(${t.gross.toFixed(2)} x 0.55) - ${t.cash.toFixed(2)} + ${t.fuel.toFixed(2)} = ${t.take.toFixed(2)}`;
+  $('#bar').innerHTML=`<span style="width:${t.eos/max*100}%;background:var(--gold)"></span><span style="width:${t.cash/max*100}%;background:var(--text)"></span><span style="width:${runsAcc/max*100}%;background:var(--gold3)"></span><span style="width:${t.fuel/max*100}%;background:var(--red)"></span>`;
+  $('#eosLegend').textContent=money(t.eos); $('#cashLegend').textContent=money(t.cash); $('#runsLegend').textContent=money(runsAcc); $('#fuelLegend').textContent=money(t.fuel);
+  $('#eosChip').textContent=money(t.eos); $('#cashChip').textContent=money(t.cash); $('#runsChip').textContent=money(runsAcc); $('#fuelChip').textContent=money(t.fuel); $('#hailChip').textContent=money(t.levy); $('#levyDisplay').value=`Levy ${money(t.levy)}`;
+  $('#messagePreview').textContent=message(); $('#heroRego').textContent=calc.rego||'No rego'; $('#nudgeSub').textContent=`${nn(calc.hailTrips)} hail trips | private levy ${money(t.levy)}`; renderRegoOptions();
+  try{localStorage.setItem(KEYS.shift,JSON.stringify(calc))}catch{}
+}
+function bindCalc(){
+  $('#shiftChips').addEventListener('click',e=>{
+    const head=e.target.closest('.chip>button');
+    if(head){const chip=head.closest('.chip'); const open=chip.classList.contains('open'); $('#shiftChips').querySelectorAll('.chip').forEach(c=>c.classList.remove('open')); if(!open)chip.classList.add('open'); return}
+    let changed=false; const add=e.target.dataset.add;
+    if(add==='eos'){calc.eos.push(0);changed=true}
+    if(add==='cash'){calc.cash.push({name:'',amount:0});changed=true}
+    if(add==='account'){calc.accounts.push({name:'',amount:0});changed=true}
+    const de=e.target.dataset.delEos, dc=e.target.dataset.delCash, da=e.target.dataset.delAccount;
+    if(de!==undefined){calc.eos.splice(+de,1); if(!calc.eos.length)calc.eos=[0]; changed=true}
+    if(dc!==undefined){calc.cash.splice(+dc,1); if(!calc.cash.length)calc.cash=[{name:'',amount:0}]; changed=true}
+    if(da!==undefined){calc.accounts.splice(+da,1); changed=true}
+    if(changed){renderRows();renderCalc()}
+  });
+  $('#shiftChips').addEventListener('input',e=>{const d=e.target.dataset;
+    if(d.eos!==undefined)calc.eos[d.eos]=nn(e.target.value);
+    if(d.cashName!==undefined)calc.cash[d.cashName].name=e.target.value;
+    if(d.cashAmount!==undefined)calc.cash[d.cashAmount].amount=nn(e.target.value);
+    if(d.accountName!==undefined)calc.accounts[d.accountName].name=e.target.value;
+    if(d.accountAmount!==undefined)calc.accounts[d.accountAmount].amount=nn(e.target.value);
+    if(e.target.id==='runCount')calc.runs=nn(e.target.value);
+    if(e.target.id==='fuelAmount')calc.fuelAmount=nn(e.target.value);
+    if(e.target.id==='fuelType')calc.fuelType=e.target.value;
+    if(e.target.id==='hailTrips'){calc.hailTrips=e.target.value;if(e.target.value!==''){$('.chip[data-chip="hail"]')?.classList.remove('field-error','required');const v=shareValidation();if(v.ok)clearShareValidationUI();}}
+    pulse(); renderCalc()});
+  $('#todayBtn').onclick=()=>{calc.date=localDateStr(new Date());setActiveDate('todayBtn');renderRows();renderCalc()};
+  $('#yesterdayBtn').onclick=()=>{const d=new Date();d.setDate(d.getDate()-1);calc.date=localDateStr(d);setActiveDate('yesterdayBtn');renderRows();renderCalc()};
+  $('#pickBtn').onclick=()=>{try{$('#shiftDate').showPicker?$('#shiftDate').showPicker():$('#shiftDate').click()}catch{$('#shiftDate').click()}};
+  $('#shiftDate').onchange=e=>{calc.date=e.target.value;setActiveDate('pickBtn');renderCalc()};
+}
+function setActiveDate(id){['todayBtn','yesterdayBtn','pickBtn'].forEach(x=>$('#'+x).classList.toggle('active',x===id))}
+function pulse(){const el=$('#takeHome');el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse')}
+function resetCalc(){calc={date:localDateStr(new Date()),rego:calc.rego,eos:[0],cash:[{name:'',amount:0}],runs:0,accounts:[],fuelAmount:0,fuelType:localStorage.getItem(KEYS.fuelDefault)||'Diesel',hailTrips:''};$('#receiptFile').value='';$('#receiptName').textContent='';$('#receiptChip').textContent='None';setActiveDate('todayBtn');renderRows();renderCalc();toast('Cleared')}
+function loadShiftIntoCalc(entry){
+  const snap=state.snapshots[shiftKey(entry.date,entry.rego)];
+  if(snap){calc=JSON.parse(JSON.stringify(snap));if(!Array.isArray(calc.eos)||!calc.eos.length)calc.eos=[0];if(!Array.isArray(calc.cash)||!calc.cash.length)calc.cash=[{name:'',amount:0}];if(!Array.isArray(calc.accounts))calc.accounts=[];show('shift');setActiveDate(entry.date===localDateStr(new Date())?'todayBtn':'pickBtn');renderRows();renderCalc();toast('Loaded saved shift');return;}
+  const cash=state.cash[entry.date], fuel=state.fuel[entry.date], trips=state.trip[entry.date];
+  calc.date=entry.date; calc.rego=entry.rego||calc.rego;
+  calc.cash=(cash?.payers?.length?cash.payers.map(p=>({name:p.name||'',amount:nn(p.amount)})):[{name:'',amount:nn(cash?.total)}]);
+  if(!calc.cash.length)calc.cash=[{name:'',amount:0}];
+  calc.fuelAmount=nn(fuel?.amount); calc.fuelType=fuel?.type||calc.fuelType; calc.hailTrips=trips!==undefined?String(trips):'';
+  calc.eos=[0]; calc.accounts=[];
+  show('shift'); setActiveDate(entry.date===localDateStr(new Date())?'todayBtn':'pickBtn'); renderRows(); renderCalc();
+  toast('Loaded into calculator - EOS/runs need re-entry');
+}
+async function saveShift(){
+  try{
+    const t=totals();
+    if(t.eos===0&&t.cash===0&&t.runs===0&&t.accounts===0){toast('Add some takings first');return false}
+    if(calc.hailTrips===''||calc.hailTrips===null||calc.hailTrips===undefined)calc.hailTrips=0;
+    const entry={date:calc.date,amount:+t.take.toFixed(2),rego:calc.rego||''};
+    state.entries=state.entries.filter(x=>!(x.date===entry.date&&x.rego===entry.rego));
+    state.entries.push(entry);
+    save(KEYS.entries,state.entries);
+    immediateSync(KEYS.entries); // zero-debounce: shift saves go up instantly
+    state.messages[shiftKey(entry.date,entry.rego)]=message(); save(KEYS.messages,state.messages);
+    state.snapshots[shiftKey(entry.date,entry.rego)]=JSON.parse(JSON.stringify(calc)); save(KEYS.snapshots,state.snapshots);
+    state.fuel[calc.date]={amount:t.fuel,type:calc.fuelType}; save(KEYS.fuel,state.fuel);
+    state.trip[calc.date]=nn(calc.hailTrips); save(KEYS.trip,state.trip);
+    state.cash[calc.date]={total:t.cash,payers:calc.cash.filter(x=>nn(x.amount)>0)}; save(KEYS.cash,state.cash);
+    const f=$('#receiptFile').files[0]; if(f) await saveReceiptFile(f,true,calc.date);
+    toast('Shift saved'); renderSettings(); return true;
+  }catch(e){ toast('Could not save shift - try again'); return false; }
+}
+async function performShare(){ const caption=message(); const file=await shiftReceiptFile(); await shareFileAndText(file,caption); }
+/* Dual-action share. addToWeekly=true logs the shift first (DB save) then shares;
+   false skips logging and shares directly. Both paths are guarded so a save failure
+   alerts the user without breaking the subsequent share. */
+async function doShareShift(addToWeekly){
+  closeShareSheet();
+  try{
+    if(addToWeekly){
+      let ok=false;
+      try{ ok=await saveShift(); }
+      catch(e){ ok=false; }
+      if(!ok) toast('Could not log to weekly \u2013 sharing anyway');
+    }
+    await performShare();
+  }catch(e){ toast('Share failed - try again'); }
+}
+/* Req 5: receipt photo + hail trips are strictly mandatory before sharing */
+function shareValidation(){
+  const errors=[];
+  const hasReceipt=!!($('#receiptFile')&&$('#receiptFile').files[0]) || (((state.receipts&&state.receipts[calc.date])||[]).some(r=>r&&r.fileData));
+  const hailFilled=!(calc.hailTrips===''||calc.hailTrips===null||calc.hailTrips===undefined);
+  if(!hasReceipt)errors.push('receipt');
+  if(!hailFilled)errors.push('hail');
+  return {ok:errors.length===0,errors,hasReceipt,hailFilled};
+}
+function clearShareValidationUI(){
+  const m=$('#shareValidate'); if(m){m.classList.remove('show');m.textContent='';}
+  $('.chip[data-chip="receipt"]')?.classList.remove('field-error','required');
+  $('.chip[data-chip="hail"]')?.classList.remove('field-error','required');
+}
+function showShareValidation(v){
+  const m=$('#shareValidate');
+  const msgs=[];
+  if(!v.hasReceipt)msgs.push('attach a receipt photo');
+  if(!v.hailFilled)msgs.push('enter the hail trips count');
+  if(m){m.textContent='Before sharing, please '+msgs.join(' and ')+'.';m.classList.add('show');}
+  const rc=$('.chip[data-chip="receipt"]'), hc=$('.chip[data-chip="hail"]');
+  if(!v.hasReceipt&&rc){rc.classList.add('field-error','required','open');}
+  if(!v.hailFilled&&hc){hc.classList.add('field-error','required','open');}
+  // open the first failing chip so the user sees the field
+  const firstFail=!v.hasReceipt?rc:hc;
+  if(firstFail){$('#shiftChips').querySelectorAll('.chip').forEach(c=>{if(c!==rc&&c!==hc)c.classList.remove('open')});firstFail.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+/* On valid share, present the dual-action sheet. The native share intent is held
+   until the user explicitly picks Add-to-Weekly or Just-Share. Dismissing (overlay
+   tap / swipe down) cancels safely and never clears the entered shift details. */
+function shareShift(){
+  clearShareValidationUI();
+  const v=shareValidation();
+  if(!v.ok){ showShareValidation(v); toast('Receipt and hail trips are required'); return; }
+  openShareSheet();
+}
+function openShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.add('show'); }
+function closeShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.remove('show'); }
+(function bindShareSheet(){
+  const ov=$('#shareSheet'), card=$('#shareSheetCard'); if(!ov||!card)return;
+  // Outside / backdrop tap cancels — no share fired, no data cleared
+  ov.addEventListener('click',e=>{ if(e.target===ov)closeShareSheet(); });
+  const addBtn=$('#sheetAdd'), skipBtn=$('#sheetSkip');
+  if(addBtn)addBtn.onclick=()=>doShareShift(true);   // log to weekly, then share
+  if(skipBtn)skipBtn.onclick=()=>doShareShift(false); // skip logging, share now
+  // Swipe-down to dismiss (buttons keep their own taps)
+  let startY=null, dy=0, drag=false;
+  card.addEventListener('pointerdown',e=>{ if(e.target.closest('.sheet-btn'))return; startY=e.clientY; dy=0; drag=true; card.style.transition='none'; try{card.setPointerCapture(e.pointerId);}catch(_){} });
+  card.addEventListener('pointermove',e=>{ if(!drag)return; dy=Math.max(0,e.clientY-startY); card.style.transform=`translate(-50%,${dy}px)`; });
+  const end=e=>{ if(!drag)return; drag=false; card.style.transition=''; card.style.transform=''; if(dy>90)closeShareSheet(); try{card.releasePointerCapture(e.pointerId);}catch(_){} };
+  card.addEventListener('pointerup',end); card.addEventListener('pointercancel',end);
+})();
+$('#shareShift').onclick=shareShift; $('#copyMsg').onclick=()=>navigator.clipboard?.writeText(message()).then(()=>toast('Message copied')).catch(()=>toast('Copy unavailable')); $('#clearShift').onclick=()=>confirmBox('Clear shift','Clear current calculator fields?',resetCalc);
+$('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None';if(e.target.files[0]){$('.chip[data-chip="receipt"]')?.classList.remove('field-error','required');const v=shareValidation();if(v.ok)clearShareValidationUI();}};
+
+const DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+/* Configured week cycle. Defaults: start Thursday (4), credited Friday (5) — preserves prior behaviour. */
+function weekStartDay(){const v=parseInt(localStorage.getItem(KEYS.weekStartDay),10);return (v>=0&&v<=6)?v:4;}
+function creditDay(){const v=parseInt(localStorage.getItem(KEYS.creditDay),10);return (v>=0&&v<=6)?v:5;}
+function weekEndDay(){return (weekStartDay()+6)%7;}
+function weekCycleLabel(){return `${DAY_NAMES[weekStartDay()]} \u2192 ${DAY_NAMES[weekEndDay()]}`;}
+function weekStart(d=new Date()){const x=new Date(d); const S=weekStartDay(); const diff=((x.getDay()-S)+7)%7; x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x}
+function shiftDays(dateStr,days){const d=parseLocal(dateStr);d.setDate(d.getDate()+days);return localDateStr(d)}
+
+/* ===================================================================
+   HISTORICAL IMPORT / BACKDATING ENGINE  (isolated, non-destructive)
+   ───────────────────────────────────────────────────────────────────
+   • Upsert only: inserts missing days, amends changed amounts, never
+     deletes or truncates any existing record or other state table.
+   • Every row passes an isolated sanitation filter; bad rows are
+     rejected individually and the rest still import.
+   • recalcWeeklyTotals() is a PURE read-only utility — it derives
+     weekly figures from records without touching global state.
+=================================================================== */
+const HISTORICAL_IMPORT=[{d:'2025-09-18',a:393.87},{d:'2025-09-19',a:481.45},{d:'2025-09-20',a:272.6},{d:'2025-09-21',a:156.4},{d:'2025-09-22',a:348.68},{d:'2025-09-23',a:551},{d:'2025-09-24',a:537},{d:'2025-09-25',a:318.8},{d:'2025-09-27',a:259.5},{d:'2025-09-28',a:270.5},{d:'2025-09-29',a:337.4},{d:'2025-09-30',a:437},{d:'2025-10-01',a:472.65},{d:'2025-10-02',a:375.9},{d:'2025-10-03',a:553},{d:'2025-10-04',a:274.8},{d:'2025-10-05',a:236.3},{d:'2025-10-06',a:307.3},{d:'2025-10-07',a:533},{d:'2025-10-08',a:537.7},{d:'2025-10-10',a:598.6},{d:'2025-10-11',a:213},{d:'2025-10-12',a:188.5},{d:'2025-10-13',a:377.9},{d:'2025-10-14',a:384},{d:'2025-10-15',a:628.8},{d:'2025-10-16',a:420},{d:'2025-10-17',a:411.78},{d:'2025-10-18',a:281.79},{d:'2025-10-20',a:515},{d:'2025-10-21',a:436},{d:'2025-10-22',a:402.6},{d:'2025-10-23',a:587.7},{d:'2025-10-24',a:426.75},{d:'2025-10-27',a:360},{d:'2025-10-28',a:487},{d:'2025-10-29',a:382.9},{d:'2025-10-30',a:289.3},{d:'2025-10-31',a:394.5},{d:'2025-11-01',a:399.6},{d:'2025-11-02',a:119},{d:'2025-11-03',a:451.46},{d:'2025-11-05',a:470},{d:'2025-11-06',a:461.6},{d:'2025-11-07',a:489.7},{d:'2025-11-09',a:213},{d:'2025-11-10',a:412.69},{d:'2025-11-11',a:474},{d:'2025-11-12',a:273.4},{d:'2025-11-13',a:337.4},{d:'2025-11-14',a:476.8},{d:'2025-11-16',a:458},{d:'2025-11-17',a:421.96},{d:'2025-11-18',a:463.3},{d:'2025-11-19',a:412},{d:'2025-11-20',a:137.9},{d:'2025-11-21',a:277.3},{d:'2025-11-23',a:350},{d:'2025-11-24',a:399},{d:'2025-11-25',a:548.3},{d:'2025-11-26',a:468.4},{d:'2025-11-27',a:62},{d:'2025-11-28',a:378},{d:'2025-11-29',a:190},{d:'2025-11-30',a:315.7},{d:'2025-12-01',a:406.6},{d:'2025-12-02',a:336},{d:'2025-12-03',a:497.62},{d:'2025-12-04',a:431.9},{d:'2025-12-05',a:468.9},{d:'2025-12-07',a:284.75},{d:'2025-12-08',a:407},{d:'2025-12-12',a:310.75},{d:'2025-12-13',a:332.67},{d:'2025-12-14',a:122.35},{d:'2025-12-15',a:410.66},{d:'2025-12-16',a:464.3},{d:'2025-12-17',a:530.63},{d:'2025-12-18',a:434},{d:'2025-12-19',a:351.14},{d:'2025-12-21',a:147},{d:'2025-12-22',a:304.5},{d:'2025-12-23',a:257.31},{d:'2025-12-24',a:330.4},{d:'2025-12-25',a:484},{d:'2025-12-27',a:313.83},{d:'2025-12-28',a:175.79},{d:'2025-12-29',a:472.36},{d:'2025-12-30',a:400.72},{d:'2025-12-31',a:421.5},{d:'2026-01-02',a:303.92},{d:'2026-01-03',a:221.21},{d:'2026-01-05',a:530.44},{d:'2026-01-06',a:479.2},{d:'2026-01-07',a:516.61},{d:'2026-01-08',a:509.88},{d:'2026-01-09',a:304.59},{d:'2026-01-10',a:442.36},{d:'2026-01-11',a:32.45},{d:'2026-01-12',a:481.27},{d:'2026-01-13',a:526.23},{d:'2026-01-14',a:412.56},{d:'2026-01-15',a:317.66},{d:'2026-01-16',a:337},{d:'2026-01-17',a:390.77},{d:'2026-01-18',a:182.6},{d:'2026-01-19',a:547.37},{d:'2026-01-20',a:388.25},{d:'2026-01-21',a:261.61},{d:'2026-01-22',a:499},{d:'2026-01-23',a:480},{d:'2026-01-24',a:303},{d:'2026-01-27',a:547.82},{d:'2026-01-28',a:319.3},{d:'2026-01-29',a:369.28},{d:'2026-01-30',a:483.8},{d:'2026-02-01',a:249},{d:'2026-02-02',a:469},{d:'2026-02-03',a:286.5},{d:'2026-02-04',a:378},{d:'2026-02-05',a:486.3},{d:'2026-02-06',a:465.15},{d:'2026-02-07',a:297.8},{d:'2026-02-09',a:348},{d:'2026-02-10',a:542.4},{d:'2026-02-11',a:332.65},{d:'2026-02-12',a:372.9},{d:'2026-02-15',a:111.4},{d:'2026-02-16',a:560},{d:'2026-02-17',a:591.7},{d:'2026-02-18',a:507.6},{d:'2026-02-19',a:420.9},{d:'2026-02-21',a:148.5},{d:'2026-02-22',a:150.7},{d:'2026-02-23',a:577.5},{d:'2026-02-24',a:468.3},{d:'2026-02-25',a:608.5},{d:'2026-02-26',a:413.5},{d:'2026-02-28',a:152},{d:'2026-03-01',a:68.7},{d:'2026-03-02',a:353.4},{d:'2026-03-03',a:397.44},{d:'2026-03-04',a:290},{d:'2026-03-05',a:356},{d:'2026-03-07',a:160},{d:'2026-03-08',a:114},{d:'2026-03-09',a:248},{d:'2026-03-10',a:368.6},{d:'2026-03-11',a:379.5},{d:'2026-03-12',a:361.4},{d:'2026-03-13',a:401},{d:'2026-03-15',a:353.6},{d:'2026-03-16',a:319},{d:'2026-03-17',a:395.59},{d:'2026-03-18',a:337},{d:'2026-03-19',a:370},{d:'2026-03-20',a:359.7},{d:'2026-03-21',a:120},{d:'2026-03-27',a:355.3},{d:'2026-03-28',a:263.5},{d:'2026-03-29',a:149.3},{d:'2026-04-02',a:422},{d:'2026-04-03',a:302.3},{d:'2026-04-05',a:147.3},{d:'2026-04-06',a:254.4},{d:'2026-04-07',a:504.69},{d:'2026-04-11',a:279.5},{d:'2026-04-12',a:450},{d:'2026-04-14',a:365},{d:'2026-04-18',a:406.7},{d:'2026-04-19',a:268.9},{d:'2026-04-20',a:459.5},{d:'2026-04-24',a:515.4},{d:'2026-04-26',a:321},{d:'2026-04-27',a:577.7},{d:'2026-04-28',a:331.9}];
+// Isolated per-row validator — guarantees schema match before commit
+function sanitizeImportRow(row){
+  try{
+    if(!row||typeof row!=='object')return {ok:false,reason:'bad row'};
+    const d=String(row.d!==undefined?row.d:row.date||'').trim();
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return {ok:false,reason:'bad date format'};
+    const dt=parseLocal(d); if(!dt||isNaN(dt.getTime())||localDateStr(dt)!==d)return {ok:false,reason:'invalid calendar date'};
+    let a=row.a!==undefined?row.a:row.amount;
+    if(typeof a==='string')a=Number(a.replace(/[^0-9.\-]/g,''));
+    a=Number(a);
+    if(!isFinite(a)||a<0||a>100000)return {ok:false,reason:'bad amount'};
+    return {ok:true,entry:{date:d,amount:+a.toFixed(2)}};
+  }catch(e){ return {ok:false,reason:'exception'}; }
+}
+// Dry-run: classify rows as insert / amend / unchanged / rejected WITHOUT mutating anything
+function previewHistoricalImport(dataset,rego){
+  const useRego=(rego!==undefined?rego:((state.regos&&state.regos[0])||''));
+  const res={inserted:0,amended:0,unchanged:0,rejected:0,rejects:[],valid:[],rego:useRego};
+  const existing={}; (state.entries||[]).forEach(e=>{ if(e&&e.date!==undefined)existing[e.date+'|'+(e.rego||'')]=+Number(e.amount).toFixed(2); });
+  (dataset||[]).forEach(row=>{
+    const v=sanitizeImportRow(row);
+    if(!v.ok){res.rejected++;res.rejects.push((row&&(row.d||row.date))+': '+v.reason);return;}
+    const key=v.entry.date+'|'+useRego, en={date:v.entry.date,amount:v.entry.amount,rego:useRego};
+    res.valid.push(en);
+    if(existing[key]===undefined)res.inserted++;
+    else if(existing[key]!==v.entry.amount)res.amended++;
+    else res.unchanged++;
+  });
+  return res;
+}
+// Commit: applies ONLY the validated entries via upsert to state.entries (nothing else touched)
+function commitHistoricalImport(valid){
+  let ins=0,amd=0;
+  try{
+    const byKey={}; state.entries.forEach((e,i)=>{ if(e&&e.date!==undefined)byKey[e.date+'|'+(e.rego||'')]=i; });
+    valid.forEach(en=>{
+      const key=en.date+'|'+(en.rego||''), idx=byKey[key];
+      if(idx===undefined){ state.entries.push({date:en.date,amount:en.amount,rego:en.rego}); byKey[key]=state.entries.length-1; ins++; }
+      else if(+Number(state.entries[idx].amount).toFixed(2)!==en.amount){ state.entries[idx].amount=en.amount; amd++; }
+    });
+    save(KEYS.entries,state.entries); immediateSync(KEYS.entries);
+  }catch(e){ /* non-fatal: leave already-applied rows intact */ }
+  return {ins,amd};
+}
+// PURE isolated recalculation utility — derives weekly (cycle-aware) totals, mutates nothing
+function recalcWeeklyTotals(entries){
+  try{
+    const b={};
+    (entries||[]).forEach(e=>{ if(!e||!e.date)return; const amt=Number(e.amount); if(!isFinite(amt))return; const s=localDateStr(weekStart(parseLocal(e.date))); (b[s]||(b[s]={start:s,total:0,count:0})); b[s].total+=amt; b[s].count++; });
+    return Object.values(b).map(w=>({start:w.start,end:shiftDays(w.start,6),total:+w.total.toFixed(2),count:w.count})).sort((x,y)=>x.start.localeCompare(y.start));
+  }catch(e){ return []; }
+}
+// Orchestrator wired to the Profile button
+function importHistoricalData(){
+  let pre;
+  try{ pre=previewHistoricalImport(HISTORICAL_IMPORT); }
+  catch(e){ toast('Import preview failed'); return; }
+  const wk=recalcWeeklyTotals(pre.valid);
+  const grand=pre.valid.reduce((a,b)=>a+b.amount,0);
+  const msg=`Ready to import ${pre.valid.length} day${pre.valid.length===1?'':'s'} (rego ${pre.rego||'none'}).\n\n`+
+            `New: ${pre.inserted}   Amended: ${pre.amended}\nUnchanged: ${pre.unchanged}   Rejected: ${pre.rejected}\n\n`+
+            `${wk.length} weeks \u00b7 total ${money(grand)}.\n\nExisting shifts on other dates stay untouched.`;
+  confirmBox('Import historical totals',msg,()=>{
+    const r=commitHistoricalImport(pre.valid);
+    toast(`Imported \u2014 ${r.ins} new, ${r.amd} amended`);
+    // single, loop-free refresh of whatever screen is active
+    try{const scr=document.querySelector('.screen.active')?.dataset.screen; if(scr==='weekly')renderWeekly(); else if(scr==='reports')renderReports();}catch(_){}
+  },'Import','Cancel');
+}
+function wkRange(){ if(!state.wkStart||!state.wkEnd){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);state.wkStart=localDateStr(s);state.wkEnd=localDateStr(e);} return [state.wkStart,state.wkEnd]; }
+function wkLabel(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return `${fmtDate(lo)} - ${fmtDate(hi)}`}
+function weekEntries(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return state.entries.filter(e=>e&&e.date>=lo&&e.date<=hi).sort((x,y)=>x.date.localeCompare(y.date))}
+function repMatch(d){ if(state.repAllTime)return true; const a=state.repStart,b=state.repEnd; if(!a||!b)return true; const lo=a<=b?a:b,hi=a<=b?b:a; return d>=lo&&d<=hi; }
+function repLabel(){ if(state.repAllTime)return 'All time'; const a=state.repStart,b=state.repEnd; if(!a||!b)return 'All time'; const lo=a<=b?a:b,hi=a<=b?b:a; return `${fmtDate(lo)} - ${fmtDate(hi)}`; }
+function filterMapRep(obj){const out={};Object.keys(obj||{}).forEach(d=>{if(repMatch(d))out[d]=(obj||{})[d]});return out}
+function normCash(v){return v&&typeof v==='object'?{total:n(v.total),payers:Array.isArray(v.payers)?v.payers:[]}:{total:n(v),payers:[]}}
+function normFuel(v){return v&&typeof v==='object'?{amount:n(v.amount),type:v.type||'Fuel'}:{amount:n(v),type:'Fuel'}}
+function reportEntries(){return state.entries.filter(e=>e&&repMatch(e.date)).sort((x,y)=>x.date.localeCompare(y.date))}
+function saveWk(){try{localStorage.setItem('d2e_wk_range',JSON.stringify({s:state.wkStart,e:state.wkEnd}))}catch{}}
+function saveRep(){try{localStorage.setItem('d2e_rep_range',JSON.stringify({s:state.repStart,e:state.repEnd,all:!!state.repAllTime}))}catch{}}
+function shiftRowsHTML(entries){return entries.map((r,i)=>`<div class="table-row" data-row="${i}" style="grid-template-columns:1fr auto auto 26px;cursor:pointer"><span>${fmtDate(r.date)}</span><span class="tag">${esc(r.rego||'REG')}</span><b class="gold" style="text-align:right">${money(r.amount)}</b><button class="mini" data-del-entry="${i}" aria-label="Delete" style="width:26px;height:30px;line-height:1">x</button></div>`).join('')||'<p class="muted" style="padding:10px 2px">No shifts in this range.</p>'}
+function openShiftModal(entry){ $('#modalTitle').textContent=`Shift - ${fmtDate(entry.date)}`;$('#modalText').className='preview-message';$('#modalText').textContent=shiftPreviewForEntry(entry);$('#modalCancel').textContent='Load to edit';$('#modalOk').textContent='Copy';$('#modal').classList.add('show');$('#modalCancel').onclick=()=>{$('#modal').classList.remove('show');loadShiftIntoCalc(entry)};$('#modalOk').onclick=()=>navigator.clipboard?.writeText($('#modalText').textContent).then(()=>{$('#modal').classList.remove('show');toast('Copied')}).catch(()=>$('#modal').classList.remove('show')); }
+function bindShiftRows(container,entries,rerender){ if(!container)return; container.onclick=e=>{ const del=e.target.closest('[data-del-entry]'); if(del){const r=entries[del.dataset.delEntry]; if(!r)return; confirmBox('Delete shift',`Delete ${fmtDate(r.date)} (${r.rego||'REG'}) ${money(r.amount)}? This cannot be undone.`,()=>{state.entries=state.entries.filter(x=>x!==r); delete state.messages[shiftKey(r.date,r.rego)]; delete state.snapshots[shiftKey(r.date,r.rego)]; save(KEYS.entries,state.entries); save(KEYS.messages,state.messages); save(KEYS.snapshots,state.snapshots); rerender()}); return} const row=e.target.closest('[data-row]'); if(row){const entry=entries[row.dataset.row]; if(entry)openShiftModal(entry);} }; }
+/* Req 8: Thu-Wed status badge — Current (this week) vs Credited (past Friday after week end) */
+function weekStatus(){
+  const [a,b]=wkRange();
+  const lo=a<=b?a:b, hi=a<=b?b:a;
+  const today=new Date(); today.setHours(0,0,0,0);
+  // The live operational week start is derived from the 2-pin clock cycle (weekStart()).
+  // Any viewed week that begins after the live week's start sits entirely in the future.
+  const liveStart=localDateStr(weekStart());
+  if(lo>liveStart) return 'pending';
+  // Credited once the calendar reaches the configured pay/milestone day that falls
+  // immediately after this week's end. We advance from the week-end date to the first
+  // occurrence of the credit weekday strictly after it (e.g. Wed end + next Friday).
+  const cd=creditDay();
+  const creditDate=parseLocal(hi); creditDate.setHours(0,0,0,0);
+  do{creditDate.setDate(creditDate.getDate()+1);}while(creditDate.getDay()!==cd);
+  return today>=creditDate ? 'credited' : 'current';
+}
+function renderWeekStatus(){
+  const badge=$('#wkBadge'); if(!badge)return;
+  const st=weekStatus();
+  badge.className='wk-badge '+st;
+  badge.textContent=st==='credited'?'Credited':st==='pending'?'Pending':'Current';
+}
+function applyWkStatusVisibility(){
+  const hidden=localStorage.getItem('d2e_wk_status_hidden')==='1';
+  $('#wkStatusBar')?.classList.toggle('collapsed',hidden);
+  $('#wkStatusToggle')?.classList.toggle('hidden',hidden);
+}
+function renderWeekly(){
+  wkRange();
+  if($('#wkStart'))$('#wkStart').value=state.wkStart; if($('#wkEnd'))$('#wkEnd').value=state.wkEnd; if($('#wkLabel'))$('#wkLabel').textContent=wkLabel();
+  const rows=weekEntries();
+  $('#weekRows').innerHTML=shiftRowsHTML(rows);
+  $('#weekTotal').textContent=money(rows.reduce((a,b)=>a+n(b.amount),0));
+  bindShiftRows($('#weekRows'),rows,renderWeekly);
+  renderWeekStatus(); applyWkStatusVisibility();
+}
+$('#wkPrev').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,-7);state.wkEnd=shiftDays(state.wkEnd,-7);saveWk();renderWeekly()};
+$('#wkStatusToggle').onclick=()=>{const hidden=localStorage.getItem('d2e_wk_status_hidden')==='1';localStorage.setItem('d2e_wk_status_hidden',hidden?'0':'1');applyWkStatusVisibility()};
+$('#wkNext').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,7);state.wkEnd=shiftDays(state.wkEnd,7);saveWk();renderWeekly()};
+$('#wkStart').onchange=e=>{state.wkStart=e.target.value;saveWk();renderWeekly()};
+$('#wkEnd').onchange=e=>{state.wkEnd=e.target.value;saveWk();renderWeekly()};
+$('#overrideToggle').onclick=()=>$('#overrideToggle').closest('.chip').classList.toggle('open');
+$('#saveOverride').onclick=()=>{const date=$('#overrideDate').value||localDateStr(new Date()), amount=n($('#overrideAmount').value), rego=$('#overrideRego').value.trim()||calc.rego||''; if(!amount){toast('Enter an amount');return} state.entries=state.entries.filter(x=>!(x.date===date&&x.rego===rego)); state.entries.push({date,amount:+amount.toFixed(2),rego}); save(KEYS.entries,state.entries); immediateSync(KEYS.entries); $('#overrideAmount').value='';$('#overrideRego').value=''; toast('Entry saved'); renderWeekly()};
+async function shareWeek(){ toast('Preparing photo...'); const {card,cleanup}=buildWeekShareCard(); const file=await captureCard(card,'drive2earn-week.png'); cleanup(); await shareFileAndText(file,weekShareText()); }
+$('#shareWeek').onclick=shareWeek;
+
+function applyQuickFilter(kind){
+  state.repAllTime=false; const today=new Date();
+  if(kind==='alltime'){state.repAllTime=true}
+  else if(kind==='last30'){const sdt=new Date(today);sdt.setDate(today.getDate()-29);state.repStart=localDateStr(sdt);state.repEnd=localDateStr(today)}
+  else if(kind==='lastmonth'){const first=new Date(today.getFullYear(),today.getMonth()-1,1);const last=new Date(today.getFullYear(),today.getMonth(),0);state.repStart=localDateStr(first);state.repEnd=localDateStr(last)}
+  else if(kind==='lastweek'){const s=weekStart();s.setDate(s.getDate()-7);const e=new Date(s);e.setDate(s.getDate()+6);state.repStart=localDateStr(s);state.repEnd=localDateStr(e)}
+}
+/* ── BAS Quarter Quick Pull (isolated, non-destructive) ───────────────
+   These helpers only override the active UI date-range filter (repStart/
+   repEnd). They never touch state.entries/fuel/cash/trip/expenses, so the
+   underlying transactions and the Copy CSV / Download pipelines are safe —
+   those read whatever range repMatch() currently reflects. */
+const BAS_QUARTERS=[
+  {q:1,label:'Q1',months:'Jul\u2013Sep'},
+  {q:2,label:'Q2',months:'Oct\u2013Dec'},
+  {q:3,label:'Q3',months:'Jan\u2013Mar'},
+  {q:4,label:'Q4',months:'Apr\u2013Jun'}
+];
+function currentFyStart(){ const d=new Date(), y=d.getFullYear(), m=d.getMonth()+1; return m>=7?y:y-1; }
+function basQuarterRange(q,fyStart){
+  // Australian financial year quarters for the FY beginning July of fyStart
+  const map={
+    1:[new Date(fyStart,6,1),   new Date(fyStart,8,30)],      // Jul 1  – Sep 30
+    2:[new Date(fyStart,9,1),   new Date(fyStart,11,31)],     // Oct 1  – Dec 31
+    3:[new Date(fyStart+1,0,1), new Date(fyStart+1,2,31)],    // Jan 1  – Mar 31
+    4:[new Date(fyStart+1,3,1), new Date(fyStart+1,5,30)]     // Apr 1  – Jun 30
+  };
+  const [s,e]=map[q]||map[1];
+  return [localDateStr(s),localDateStr(e)];
+}
+function pullBasQuarter(q){
+  const [s,e]=basQuarterRange(q,currentFyStart());
+  state.repAllTime=false; state.repStart=s; state.repEnd=e;
+  saveRep(); renderReports();
+}
+function activeBasQuarter(){
+  if(state.repAllTime)return 0;
+  const fy=currentFyStart();
+  for(const x of BAS_QUARTERS){ const [s,e]=basQuarterRange(x.q,fy); if(state.repStart===s&&state.repEnd===e)return x.q; }
+  return 0;
+}
+function activeQuickFilter(){
+  if(state.repAllTime)return 'alltime';
+  const today=new Date(), s=state.repStart, e=state.repEnd; if(!s||!e)return '';
+  const d30=new Date(today);d30.setDate(today.getDate()-29);
+  if(s===localDateStr(d30)&&e===localDateStr(today))return 'last30';
+  const fm=new Date(today.getFullYear(),today.getMonth()-1,1), lm=new Date(today.getFullYear(),today.getMonth(),0);
+  if(s===localDateStr(fm)&&e===localDateStr(lm))return 'lastmonth';
+  const ws=weekStart();ws.setDate(ws.getDate()-7);const we=new Date(ws);we.setDate(ws.getDate()+6);
+  if(s===localDateStr(ws)&&e===localDateStr(we))return 'lastweek';
+  return '';
+}
+function renderReports(){ try{
+  if(!state.repAllTime && (!state.repStart||!state.repEnd)){const today=new Date(),sdt=new Date();sdt.setDate(today.getDate()-29);state.repStart=localDateStr(sdt);state.repEnd=localDateStr(today)}
+  const rate=n(localStorage.getItem(KEYS.levy)||'1.20');
+  const entries=reportEntries(), gross=entries.reduce((a,b)=>a+n(b.amount),0), active=activeQuickFilter();
+  const cash=filterMapRep(state.cash); Object.keys(cash).forEach(k=>cash[k]=normCash(cash[k]));
+  const fuel=filterMapRep(state.fuel); Object.keys(fuel).forEach(k=>fuel[k]=normFuel(fuel[k]));
+  const trip=filterMapRep(state.trip); Object.keys(trip).forEach(k=>trip[k]=n(trip[k]));
+  const exps=expandExpenses();
+  const cashTotal=Object.values(cash).reduce((a,b)=>a+n(b.total),0), trips=Object.values(trip).reduce((a,b)=>a+n(b),0), fuelTotal=Object.values(fuel).reduce((a,b)=>a+n(b.amount),0);
+  const expDeduct=exps.reduce((a,e)=>a+expenseDeductible(e),0), expGst=exps.reduce((a,e)=>a+expenseGst(e),0);
+  const modules=[
+    {title:'BAS Gross',total:gross,lines:entries.map(e=>`${fmtDate(e.date)} | ${e.rego||'REG'} | ${money(e.amount)}`),csv:'Date,Quarter,Rego,Amount\n'+entries.map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.rego||''),n(e.amount).toFixed(2)].join(',')).join('\n')},
+    {title:'Cash Income',total:cashTotal,lines:Object.entries(cash).map(([d,v])=>`${fmtDate(d)} | ${(v.payers||[]).map(p=>p.name||'Cash').join(', ')||'Cash'} | ${money(v.total)}`),csv:'Date,Payers,Amount\n'+Object.entries(cash).map(([d,v])=>[ddmmyyyy(d),csvCell((v.payers||[]).map(p=>p.name||'Cash').join('; ')||'Cash'),n(v.total).toFixed(2)].join(',')).join('\n')},
+    {title:'Hail Trips',total:trips*rate,lines:Object.entries(trip).map(([d,v])=>`${fmtDate(d)} | ${v} trips | ${money(v*rate)}`),csv:'Date,Trips,Levy\n'+Object.entries(trip).map(([d,v])=>[ddmmyyyy(d),v,(v*rate).toFixed(2)].join(',')).join('\n')},
+    {title:'Fuel Tracker',total:fuelTotal,lines:Object.entries(fuel).map(([d,v])=>`${fmtDate(d)} | ${v.type} | ${money(v.amount)}`),csv:'Date,Type,Amount\n'+Object.entries(fuel).map(([d,v])=>[ddmmyyyy(d),csvCell(v.type),n(v.amount).toFixed(2)].join(',')).join('\n')}
+  ];
+  const qf=[['lastweek','Last Week'],['last30','Last 30 Days'],['lastmonth','Last Month'],['alltime','All Time']];
+  // ── Smart figures (all derived; underlying data never mutated) ──
+  const gstSetAside=gross/11;                              // GST portion of income to set aside (1/11)
+  const netRev=gross-fuelTotal-gstSetAside-expDeduct;      // live Net Revenue
+  const shiftDates=[...new Set(entries.map(e=>e.date))];
+  const opDays=shiftDates.length;                          // operational days in period
+  // Receipts audit: ONLY count shifts logged through the app's own calculator (those have a
+  // saved snapshot and could carry a receipt). Imported / backdated / override entries are
+  // exempt — old historical receipts aren't required, so they never read as "outstanding".
+  const loggedDates=[...new Set(entries.filter(e=>e&&state.snapshots[shiftKey(e.date,e.rego||'')]).map(e=>e.date))];
+  const outstanding=loggedDates.filter(d=>!((state.receipts[d]||[]).some(r=>r&&r.shiftReceipt&&r.fileData))).length;
+  const perDay=opDays?fuelTotal/opDays:0;
+  const warnSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+  const fyS=currentFyStart(), fyLabel=`FY${String(fyS).slice(2)}\u2013${String(fyS+1).slice(2)}`, activeQ=activeBasQuarter();
+  const basPullHTML=`<section class="card bas-pull"><div class="bas-pull-head"><span class="chip-title"><span class="dot"></span>BAS Quarter Quick Pull</span><span class="bas-fy mono">${fyLabel}</span></div><div class="bas-pull-grid">${BAS_QUARTERS.map(x=>`<button class="bas-chip${activeQ===x.q?' active':''}" data-bas-q="${x.q}" aria-label="${x.label} ${x.months}"><b>${x.label}</b><small>${x.months}</small></button>`).join('')}</div></section>`;
+  // ── Net Revenue hero ──
+  const netHTML=`<section class="card rep-net"><div class="rn-label">Net Revenue</div><div class="rn-val${netRev<0?' neg':''}">${money(netRev)}</div><div class="rn-sub">${repLabel()} &middot; after fuel, GST set-aside &amp; tax expenses</div><div class="net-tiles"><div class="net-tile"><small>Gross</small><b>${money(gross)}</b></div><div class="net-tile minus"><small>− Fuel</small><b>${money(fuelTotal)}</b></div><div class="net-tile minus"><small>− GST</small><b>${money(gstSetAside)}</b></div><div class="net-tile minus"><small>− Tax</small><b>${money(expDeduct)}</b></div></div></section>`;
+  // ── Compact metric grid (totals + counts only; logs hidden) ──
+  const metricGrid=`<div class="metric-grid">`+
+    `<div class="metric"><div class="m-top"><span class="dot"></span>BAS Gross</div><div class="m-val">${money(gross)}</div><div class="m-sub">${entries.length} shift${entries.length===1?'':'s'} &middot; ${opDays} day${opDays===1?'':'s'}</div>${outstanding>0?`<div class="m-warn">${warnSvg}${outstanding} receipt${outstanding===1?'':'s'} outstanding</div>`:''}</div>`+
+    `<div class="metric"><div class="m-top"><span class="dot"></span>Cash Income</div><div class="m-val">${money(cashTotal)}</div><div class="m-sub">${Object.keys(cash).length} day${Object.keys(cash).length===1?'':'s'} logged</div></div>`+
+    `<div class="metric"><div class="m-top"><span class="dot"></span>Hail Trips</div><div class="m-val">${money(trips*rate)}</div><div class="m-sub">${trips} trip${trips===1?'':'s'} &middot; levy @ ${money(rate)}</div></div>`+
+    `<div class="metric"><div class="m-top"><span class="dot"></span>Fuel Tracker</div><div class="m-val">${money(fuelTotal)}</div><div class="m-sub">${Object.keys(fuel).length} fill${Object.keys(fuel).length===1?'':'s'}</div><div class="fuel-pill" title="Spend vs operational days">${money(fuelTotal)} / ${opDays}d &middot; <b>${money(perDay)}/day</b></div></div>`+
+    `</div>`;
+  const expCollapsed=localStorage.getItem('d2e_exp_collapsed')!=='0'; // default collapsed
+  const chevSvg='<svg class="exp-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+  const recurCount=(state.expenses||[]).filter(e=>e&&e.recurring).length;
+  const presetChips=EXPENSE_PRESETS.map(pp=>`<button class="exp-chip${expDraft.category===pp.cat?' active':''}" data-preset-cat="${esc(pp.cat)}" data-preset-gst="${pp.gst?1:0}">${esc(pp.label)}</button>`).join('')+`<button class="exp-chip more${expDraft.moreOpen?' active':''}" id="expMoreChip">More\u2026</button>`;
+  const fullSelect=`<select id="expenseCategory" style="margin-top:7px;display:${expDraft.moreOpen?'block':'none'}">${EXPENSE_CATEGORIES.map(c=>`<option${expDraft.category===c?' selected':''}>${c}</option>`).join('')}</select>`;
+  const expHTML=`<section class="card exp-card${expCollapsed?'':' open'}" id="expenseReport">
+    <button class="exp-head" id="expToggle" aria-expanded="${expCollapsed?'false':'true'}"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><span class="exp-head-right"><b class="exp-total">${money(expDeduct)}</b>${chevSvg}</span></button>
+    <div class="exp-body">
+      <div class="exp-summary"><div class="stat"><small>Tax Deductions</small><b>${money(expDeduct)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Items</small><b>${exps.length}</b></div></div>
+      ${recurCount?`<div class="exp-recur-note">${recurCount} recurring overhead${recurCount===1?'':'s'} auto-included in this period</div>`:''}
+      <div class="exp-quick">
+        <input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount $" class="exp-amount">
+        <div class="exp-chips">${presetChips}</div>
+        ${fullSelect}
+        <div class="exp-actions">
+          <label class="exp-receipt" for="expenseAttachment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg><span id="expReceiptLabel">Receipt</span></label>
+          <input id="expenseAttachment" type="file" accept="image/*,application/pdf" style="display:none">
+          <button class="exp-recur-toggle${expDraft.recurring?' on':''}" id="expRecurToggle" type="button"><span class="ert-dot"></span>Recurring</button>
+          <select id="expFrequency" class="exp-freq" style="display:${expDraft.recurring?'block':'none'}"><option value="monthly"${expDraft.frequency==='monthly'?' selected':''}>Monthly</option><option value="weekly"${expDraft.frequency==='weekly'?' selected':''}>Weekly</option></select>
+        </div>
+        <button class="exp-details-toggle" id="expDetailsToggle" type="button">${expDraft.detailsOpen?'Hide details':'More details (supplier, %, note)'}</button>
+        <div class="exp-more-fields" style="display:${expDraft.detailsOpen?'block':'none'}">
+          <div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div>
+          <div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><label class="checkline" style="margin:0"><input type="checkbox" id="expenseGst" ${expDraft.gstIncluded?'checked':''}> GST incl.</label></div>
+          <div class="row one"><input id="expenseNote" placeholder="Note"></div>
+        </div>
+        <button class="primary exp-save" id="addExpense" style="margin:10px 0 0">Log Expense</button>
+        <p class="mono muted" id="expenseQuarterPreview" style="font-size:11px;margin:7px 0 0"></p>
+        <button class="secondary" id="copyExpensesCsv" style="width:100%;margin-top:8px">Copy Expenses CSV</button>
+      </div>
+      <div class="expense-list" id="expenseList" style="margin-top:10px"></div>
+    </div>
+  </section>`;
+  // ── Unified export hub ──
+  const exportHTML=`<section class="card export-hub"><div class="exp-head"><span class="chip-title"><span class="dot"></span>Export</span><span class="muted" style="font-size:11px">${repLabel()}</span></div><div class="export-cluster"><button class="exp-copy" id="expCopy">Copy CSV</button><button class="exp-dl" id="expDl">Download Report</button></div></section>`;
+  $('#reports').innerHTML=
+    basPullHTML+
+    `<div class="qf">${qf.map(([k,l])=>`<button data-qf="${k}" class="${active===k?'active':''}">${l}</button>`).join('')}</div>`+
+    `<div class="daterow"><div class="datefield"><small>From</small><input type="date" id="repStart" ${state.repAllTime?'disabled':''}></div><div class="datefield"><small>To</small><input type="date" id="repEnd" ${state.repAllTime?'disabled':''}></div></div>`+
+    netHTML+metricGrid+expHTML+exportHTML;
+  if($('#repStart')){$('#repStart').value=state.repAllTime?'':(state.repStart||''); $('#repStart').onchange=e=>{state.repAllTime=false;state.repStart=e.target.value;saveRep();renderReports()};}
+  if($('#repEnd')){$('#repEnd').value=state.repAllTime?'':(state.repEnd||''); $('#repEnd').onchange=e=>{state.repAllTime=false;state.repEnd=e.target.value;saveRep();renderReports()};}
+  $$('#reports [data-qf]').forEach(b=>b.onclick=()=>{applyQuickFilter(b.dataset.qf);saveRep();renderReports()});
+  $$('#reports [data-bas-q]').forEach(b=>b.onclick=()=>pullBasQuarter(+b.dataset.basQ));
+  // Unified export — runs in the background (yields a frame) so the UI never freezes
+  const combinedCsv=()=>modules.map(s=>`# ${s.title} (${repLabel()})\n${s.csv||'No data'}`).join('\n\n')+`\n\n# Tax Expenses (${repLabel()})\n${expensesCsv()}`;
+  const doExport=async dl=>{ toast('Preparing export\u2026'); await new Promise(r=>setTimeout(r,0)); try{ const all=combinedCsv(); if(dl){downloadText(`drive2earn-report-${localDateStr(new Date())}.csv`,all);toast('Report downloaded');} else { if(navigator.clipboard){await navigator.clipboard.writeText(all);toast('CSV copied');} else {downloadText(`drive2earn-report-${localDateStr(new Date())}.csv`,all);toast('Copy unavailable - downloaded instead');} } }catch(e){ toast('Export failed - try again'); } };
+  if($('#expCopy'))$('#expCopy').onclick=()=>doExport(false);
+  if($('#expDl'))$('#expDl').onclick=()=>doExport(true);
+  bindExpenseReport();
+ }catch(err){ const box=$('#reports'); if(box){ box.innerHTML='<div class="card" style="padding:14px"><b>Could not build reports</b><p class="muted" style="font-size:12px;margin-top:6px">'+esc(err&&err.message||String(err))+'</p><div class="preview-actions" style="margin-top:10px"><button class="secondary" id="reportsRetry">Retry</button><button class="secondary" id="reportsReset">Reset report cache</button></div></div>'; const rt=$('#reportsRetry'); if(rt)rt.onclick=()=>renderReports(); const rs=$('#reportsReset'); if(rs)rs.onclick=()=>confirmBox('Reset report cache','Clear cached cash, levy and fuel data? Saved shift totals are kept.',()=>{state.cash={};state.fuel={};state.trip={};save(KEYS.cash,state.cash);save(KEYS.fuel,state.fuel);save(KEYS.trip,state.trip);renderReports()}); } } }
+function expensesCsv(){return ['Date,Quarter,Category,Supplier,Amount,Business %,Deductible,GST credit,Recurring,Attachment,Note',...expandExpenses().sort((a,b)=>a.date.localeCompare(b.date)).map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.category),csvCell(e.supplier||''),n(e.amount).toFixed(2),n(e.businessUse||100),expenseDeductible(e).toFixed(2),expenseGst(e).toFixed(2),(e.recurring?('Yes ('+(e.frequency||'monthly')+')'):'No'),csvCell(e.attachment?.fileName||''),csvCell(e.note||'')].join(','))].join('\n')}
+function renderExpenseList(){
+  const box=$('#expenseList'); if(!box)return;
+  const list=expandExpenses().sort((a,b)=>b.date.localeCompare(a.date));
+  box.innerHTML=list.map(e=>`<div class="expense-item"><span><b>${money(expenseDeductible(e))}</b> ${expenseGst(e)>0?`<span class="exp-gst">+GST ${money(expenseGst(e))}</span>`:''} <small>${fmtDate(e.date)} | ${basQuarter(e.date)}</small><small>${esc(e.category)}${e.supplier?' | '+esc(e.supplier):''}</small><small>${e._recurring?`<span class="exp-recur-tag">Recurring \u00b7 ${esc(e.frequency||'monthly')}</span> `:''}${esc(expenseAttachmentLabel(e))}</small></span><span><button class="view-btn" data-view-expense="${e._baseId}">View</button><button class="mini" data-del-expense="${e._baseId}" aria-label="Delete">x</button></span></div>`).join('')||'<p class="muted">No expenses in this range.</p>';
+}
+function bindExpenseReport(){
+  renderExpenseList();
+  // ── Collapse toggle (persists across tab switches & reloads) ──
+  const card=$('#expenseReport'), toggle=$('#expToggle');
+  if(toggle)toggle.onclick=()=>{const open=card.classList.toggle('open');localStorage.setItem('d2e_exp_collapsed',open?'0':'1');toggle.setAttribute('aria-expanded',open?'true':'false')};
+  const date=$('#expenseDate'), category=$('#expenseCategory'), amount=$('#expenseAmount'), q=$('#expenseQuarterPreview');
+  if(!amount)return;
+  const updateQuarter=()=>{ if(q)q.textContent=`BAS quarter: ${basQuarter((date&&date.value)||localDateStr(new Date()))}`; };
+  updateQuarter(); if(date)date.onchange=updateQuarter;
+  // ── Preset quick-log chips: autofill category + GST, then pop the numeric keypad ──
+  $$('#reports [data-preset-cat]').forEach(b=>b.onclick=()=>{
+    const cat=b.dataset.presetCat;
+    expDraft.category=cat; expDraft.gstIncluded=b.dataset.presetGst==='1'; expDraft.moreOpen=false;
+    $$('#reports .exp-chip').forEach(c=>c.classList.remove('active')); b.classList.add('active');
+    if(category){category.value=cat; category.style.display='none';}
+    const gc=$('#expenseGst'); if(gc)gc.checked=expDraft.gstIncluded;
+    try{amount.focus({preventScroll:false});}catch(_){amount.focus();} // opens decimal keypad on mobile
+  });
+  const moreChip=$('#expMoreChip');
+  if(moreChip)moreChip.onclick=()=>{ expDraft.moreOpen=!expDraft.moreOpen; if(category)category.style.display=expDraft.moreOpen?'block':'none'; moreChip.classList.toggle('active',expDraft.moreOpen); };
+  if(category)category.onchange=()=>{ expDraft.category=category.value; $$('#reports .exp-chip:not(.more)').forEach(c=>c.classList.toggle('active',c.dataset.presetCat===category.value)); };
+  // ── Recurring toggle + frequency ──
+  const recBtn=$('#expRecurToggle'), freq=$('#expFrequency');
+  if(recBtn)recBtn.onclick=()=>{ expDraft.recurring=!expDraft.recurring; recBtn.classList.toggle('on',expDraft.recurring); if(freq)freq.style.display=expDraft.recurring?'block':'none'; };
+  if(freq)freq.onchange=()=>{expDraft.frequency=freq.value;};
+  // ── Details disclosure ──
+  const detToggle=$('#expDetailsToggle'), detBox=$('#reports .exp-more-fields');
+  if(detToggle)detToggle.onclick=()=>{ expDraft.detailsOpen=!expDraft.detailsOpen; if(detBox)detBox.style.display=expDraft.detailsOpen?'block':'none'; detToggle.textContent=expDraft.detailsOpen?'Hide details':'More details (supplier, %, note)'; };
+  // ── Receipt label reflects attachment ──
+  const att=$('#expenseAttachment'), attLabel=$('#expReceiptLabel');
+  if(att)att.onchange=()=>{ if(attLabel)attLabel.textContent=att.files[0]?'Attached':'Receipt'; };
+  // ── Copy expenses CSV (background) ──
+  const copyBtn=$('#copyExpensesCsv');
+  if(copyBtn)copyBtn.onclick=async()=>{ await new Promise(r=>setTimeout(r,0)); try{ const csv=expensesCsv(); if(navigator.clipboard){await navigator.clipboard.writeText(csv);toast('Expenses CSV copied');} else {downloadText('drive2earn-expenses.csv',csv);toast('Copy unavailable - downloaded');} }catch(e){ toast('Copy failed'); } };
+  // ── Save (Quick Capture) — strict validation + try-catch ──
+  const addBtn=$('#addExpense');
+  if(addBtn)addBtn.onclick=async()=>{
+    try{
+      const cat=expDraft.category || (category&&category.value) || '';
+      const amt=nn(amount.value);
+      if(!amt){ toast('Enter an amount'); try{amount.focus();}catch(_){} return; }
+      if(!cat){ toast('Tap a category chip'); return; }
+      const dval=(date&&date.value)||localDateStr(new Date());
+      const bu=$('#expenseBusinessUse'); const businessUse=bu?(nn(bu.value)||100):100;
+      const gc=$('#expenseGst'); const gstIncluded=gc?gc.checked:expDraft.gstIncluded;
+      const sup=$('#expenseSupplier'); const note=$('#expenseNote');
+      const file=att&&att.files[0];
+      let attachment=null;
+      try{ if(file){ const _d=await prepMedia(file); attachment=_d?{fileName:file.name,fileType:file.type,fileData:_d,savedAt:new Date().toISOString()}:null; } }
+      catch(_){ toast('Could not read receipt'); }
+      state.expenses.push({id:uid(),date:dval,amount:amt,category:cat,supplier:sup?sup.value.trim():'',businessUse,gstIncluded,recurring:expDraft.recurring,frequency:expDraft.recurring?expDraft.frequency:null,note:note?note.value.trim():'',attachment,quarter:basQuarter(dval),savedAt:new Date().toISOString()});
+      save(KEYS.expenses,state.expenses);
+      toast(expDraft.recurring?'Recurring expense saved':'Expense logged');
+      // reset transient draft amount/recurring but keep details-open preference
+      expDraft.recurring=false;
+      renderReports();
+    }catch(err){ toast('Could not save expense - try again'); }
+  };
+  $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){const rl=exp.recurring?' (recurring \u2013 removes all future occurrences)':''; confirmBox('Delete expense',`Delete ${exp.category} ${money(exp.amount)} from ${fmtDate(exp.date)}?${rl}`,()=>{try{state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports();}catch(_){toast('Delete failed');}}); return} const text=`${exp.category}${exp.recurring?' (recurring '+(exp.frequency||'monthly')+')':''}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST input credit: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
+}
+function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set';
+  try{renderWeekClock();}catch(_){}
+  const cs=$('#creditDaySelect'); if(cs){cs.innerHTML=DAY_NAMES.map((d,i)=>`<option value="${i}">${d}</option>`).join('');cs.value=String(creditDay());}
+}
+$('#levyRate').oninput=e=>{setLS(KEYS.levy,e.target.value);renderCalc()}; $('#defaultFuel').onchange=e=>setLS(KEYS.fuelDefault,e.target.value);
+/* Flexible week cycle: changing it re-snaps the Weekly view to the new cycle's current week
+   and refreshes all weekly summaries + the status badge globally. */
+function applyWeekCycleChange(){
+  const s=weekStart(); const e=new Date(s); e.setDate(s.getDate()+6);
+  state.wkStart=localDateStr(s); state.wkEnd=localDateStr(e); saveWk();
+  try{renderWeekly();}catch(_){}
+}
+if($('#creditDaySelect'))$('#creditDaySelect').onchange=e=>{setLS(KEYS.creditDay,String(parseInt(e.target.value,10)));try{renderWeekStatus();}catch(_){}toast('Credited on '+DAY_NAMES[creditDay()]);};
+
+/* ── Clock-style week-cycle selector ──────────────────────────────────
+   7 days arranged in a circle (Sun at top, clockwise). Two pins:
+   • Start (filled gold knob) — the day the work week begins
+   • End   (outlined knob)    — auto-locked to start+6 (full 7-day window)
+   Dragging Start moves End to start+6; dragging End sets Start to end+1.
+   This makes an invalid/overlapping/broken window impossible by construction. */
+const WC={cx:120,cy:120,ring:84,lab:54,dot:4.5};
+const DAY2=['Su','Mo','Tu','We','Th','Fr','Sa'];
+function wcAngle(i){return -90 + i*(360/7);}
+function wcPolar(r,deg){const a=deg*Math.PI/180;return [WC.cx+r*Math.cos(a),WC.cy+r*Math.sin(a)];}
+function wcArcPath(sDeg,eDeg){const [x1,y1]=wcPolar(WC.ring,sDeg);const [x2,y2]=wcPolar(WC.ring,eDeg);return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${WC.ring} ${WC.ring} 0 1 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;}
+function renderWeekClock(){
+  const host=document.getElementById('weekClock'); if(!host)return;
+  if(document.getElementById('weekClockSvg')){updateWeekClock();return;}
+  let nodes='';
+  for(let i=0;i<7;i++){
+    const [lx,ly]=wcPolar(WC.lab,wcAngle(i)), [dx,dy]=wcPolar(WC.ring,wcAngle(i));
+    nodes+=`<circle class="wc-dot-mark" cx="${dx.toFixed(2)}" cy="${dy.toFixed(2)}" r="${WC.dot}" data-day="${i}"></circle>`;
+    nodes+=`<text class="wc-label" x="${lx.toFixed(2)}" y="${ly.toFixed(2)}" data-day="${i}">${DAY2[i]}</text>`;
+  }
+  host.innerHTML=`<svg id="weekClockSvg" viewBox="0 0 240 240" role="group" aria-label="Week cycle selector clock">
+    <defs><linearGradient id="wcg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--gold3)"/><stop offset="1" stop-color="var(--gold2)"/></linearGradient></defs>
+    <circle class="wc-track" cx="120" cy="120" r="84"></circle>
+    <path id="wcArc" class="wc-arc" d=""></path>
+    ${nodes}
+    <text id="wcCenter" class="wc-center" x="120" y="114"></text>
+    <text id="wcCenterSub" class="wc-center-sub" x="120" y="132">tap or drag</text>
+    <circle id="wcEndC" class="wc-pin wc-pin-end" r="15" data-pin="end"></circle>
+    <text id="wcEndT" class="wc-pin-txt" style="fill:var(--gold3)">E</text>
+    <circle id="wcStartC" class="wc-pin wc-pin-start" r="15" data-pin="start"></circle>
+    <text id="wcStartT" class="wc-pin-txt" style="fill:#150d00">S</text>
+  </svg>`;
+  bindWeekClock();
+  updateWeekClock();
+}
+function updateWeekClock(){
+  const svg=document.getElementById('weekClockSvg'); if(!svg)return;
+  const s=weekStartDay(), e=weekEndDay();
+  document.getElementById('wcArc').setAttribute('d',wcArcPath(wcAngle(s),wcAngle(e)));
+  const [sx,sy]=wcPolar(WC.ring,wcAngle(s)), [ex,ey]=wcPolar(WC.ring,wcAngle(e));
+  const setPin=(cid,tid,x,y)=>{const c=document.getElementById(cid);c.setAttribute('cx',x.toFixed(2));c.setAttribute('cy',y.toFixed(2));const t=document.getElementById(tid);t.setAttribute('x',x.toFixed(2));t.setAttribute('y',y.toFixed(2));};
+  setPin('wcStartC','wcStartT',sx,sy); setPin('wcEndC','wcEndT',ex,ey);
+  svg.querySelectorAll('.wc-dot-mark,.wc-label').forEach(d=>{const i=+d.getAttribute('data-day');d.classList.toggle('startday',i===s);d.classList.toggle('endday',i===e);});
+  document.getElementById('wcCenter').textContent=`${DAY2[s]} → ${DAY2[e]}`;
+  const hint=document.getElementById('weekCycleHint'); if(hint)hint.textContent=weekCycleLabel();
+}
+function setWeekStartDayValue(day){ day=((day%7)+7)%7; if(day===weekStartDay())return false; setLS(KEYS.weekStartDay,String(day)); applyWeekCycleChange(); updateWeekClock(); return true; }
+function bindWeekClock(){
+  const svg=document.getElementById('weekClockSvg'); if(!svg||svg._bound)return; svg._bound=true;
+  let drag=null;
+  const nearestDay=e=>{ const r=svg.getBoundingClientRect(); if(!r.width)return weekStartDay(); const px=(e.clientX-r.left)*(240/r.width), py=(e.clientY-r.top)*(240/r.height); const a=Math.atan2(py-WC.cy,px-WC.cx)*180/Math.PI; let best=0,bd=1e9; for(let i=0;i<7;i++){const d=Math.abs(((a-wcAngle(i)+540)%360)-180); if(d<bd){bd=d;best=i;}} return best; };
+  const apply=day=>{ if(drag==='end')setWeekStartDayValue((day+1)%7); else setWeekStartDayValue(day); };
+  svg.addEventListener('pointerdown',e=>{ const pin=e.target.getAttribute&&e.target.getAttribute('data-pin'); drag=pin==='end'?'end':'start'; try{svg.setPointerCapture(e.pointerId);}catch(_){} apply(nearestDay(e)); e.preventDefault(); });
+  svg.addEventListener('pointermove',e=>{ if(!drag)return; apply(nearestDay(e)); e.preventDefault(); });
+  const stop=e=>{ if(drag){ drag=null; try{svg.releasePointerCapture(e.pointerId);}catch(_){} toast('Week cycle: '+weekCycleLabel()); } };
+  svg.addEventListener('pointerup',stop); svg.addEventListener('pointercancel',stop);
+}
+$('#darkSwitch').onclick=()=>setTheme('dark'); $('#lightSwitch').onclick=()=>setTheme('light'); $('#themeBtn').onclick=e=>{e.stopPropagation();setTheme((localStorage.getItem(KEYS.theme)||'dark')==='dark'?'light':'dark')};
+if($('#regoSelect'))$('#regoSelect').onchange=e=>{calc.rego=e.target.value;setLS(KEYS.lastRego,calc.rego);renderCalc()};
+if($('#addRego'))$('#addRego').onclick=()=>{const v=($('#newRego').value||'').trim();if(!v){toast('Enter a rego');return}if(state.regos.some(r=>r.toLowerCase()===v.toLowerCase())){toast('Already saved');$('#newRego').value='';return}state.regos.push(v);save(KEYS.regos,state.regos);immediateSync(KEYS.regos);if(!calc.rego){calc.rego=v;setLS(KEYS.lastRego,calc.rego)}$('#newRego').value='';renderSettings();renderCalc();toast('Rego added')};
+if($('#newRego'))$('#newRego').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#addRego').click()}};
+if($('#regoChips'))$('#regoChips').onclick=e=>{const b=e.target.closest('[data-del-rego]');if(!b)return;const r=b.dataset.delRego;confirmBox('Remove rego',`Remove "${r}" from your saved regos?`,()=>{state.regos=state.regos.filter(x=>x!==r);save(KEYS.regos,state.regos);immediateSync(KEYS.regos);if(calc.rego===r){calc.rego=state.regos[0]||'';setLS(KEYS.lastRego,calc.rego)}renderSettings();renderCalc()})};
+$('#saveQuickShare').onclick=()=>{state.quickShare={name:$('#quickShareName').value.trim(),number:$('#quickShareNumber').value.trim()}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact saved')};
+$('#clearQuickShare').onclick=()=>{state.quickShare={name:'',number:''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share cleared')};
+$('#pickQuickShare').onclick=async()=>{try{if(!navigator.contacts?.select){toast('Contact picker unavailable on this device');return} const contacts=await navigator.contacts.select(['name','tel'],{multiple:false}); const c=contacts?.[0]; if(!c)return; state.quickShare={name:c.name?.[0]||'',number:c.tel?.[0]||''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact selected')}catch{toast('Contact picker cancelled')}};
+function renderProfile(){ $('#driverName').value=state.profile.name||''; $('#driverEmail').value=state.profile.email||''; $('#firebaseConfig').value=localStorage.getItem(KEYS.fb)||''; $('#changelog').innerHTML=CHANGELOG.map(c=>`v${c.version} | ${c.date}<br>${c.changes.map(x=>' - '+x).join('<br>')}`).join('<br><br>'); $('#greeting').textContent=`Hey, ${state.profile.name||'Driver'}`; $('#avatar').textContent=(state.profile.name||'D2').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase(); setSyncStatus(syncOn&&userId?'live':'local');}
+$('#saveProfile').onclick=()=>{state.profile={name:$('#driverName').value.trim()||'Driver',email:$('#driverEmail').value.trim()};save(KEYS.profile,state.profile);renderProfile();toast('Profile saved')};
+$('#exportData').onclick=()=>{const dump={};Object.values(KEYS).forEach(k=>{const v=localStorage.getItem(k);if(v!==null)dump[k]=v});downloadText(`drive2earn-backup-${localDateStr(new Date())}.json`,JSON.stringify({app:'drive2earn',version:APP_VERSION,exported:new Date().toISOString(),data:dump},null,2),'application/json');toast('Backup exported')};
+if($('#importHistoryBtn'))$('#importHistoryBtn').onclick=()=>importHistoricalData();
+$('#importData').onclick=()=>$('#importFile').click();
+$('#importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const text=await f.text();const obj=JSON.parse(text);const data=obj&&obj.data?obj.data:obj;if(!data||typeof data!=='object')throw 0;confirmBox('Import backup','Replace all current data with this backup? This cannot be undone.',()=>{Object.entries(data).forEach(([k,v])=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}});toast('Backup imported - reloading');setTimeout(()=>location.reload(),600)})}catch{toast('Invalid backup file')}finally{e.target.value=''}};
+async function saveReceiptFile(file,shiftReceipt,date=localDateStr(new Date())){try{const data=await prepMedia(file); if(!data)return; const rec={id:uid(),fileName:file.name,fileData:data,fileType:file.type,savedAt:new Date().toISOString(),shiftReceipt}; state.receipts[date]=state.receipts[date]||[]; state.receipts[date].push(rec); save(KEYS.receipts,state.receipts); toast('Receipt saved to Docs')}catch{toast('Could not save receipt')}}
+function renderReceipts(){const all=Object.entries(state.receipts).flatMap(([date,arr])=>arr.map(r=>({...r,date}))).filter(r=>state.receiptFilter==='all'||(state.receiptFilter==='shift'?r.shiftReceipt:!r.shiftReceipt)); $('#receiptGrid').innerHTML=all.map(r=>`<button class="receipt" data-receipt="${r.id}">${r.fileType?.startsWith('image')?`<img src="${r.fileData}" alt="">`:`<span>PDF<br>${esc(r.fileName)}</span>`}</button>`).join('')||'<p class="muted">No receipts yet.</p>'; $$('#receiptGrid [data-receipt]').forEach(b=>b.onclick=()=>{const r=all.find(x=>x.id===b.dataset.receipt); confirmBox(r.fileName,`${fmtDate(r.date)} | ${r.shiftReceipt?'Shift receipt':'Manual receipt'} - delete this receipt?`,()=>{state.receipts[r.date]=(state.receipts[r.date]||[]).filter(x=>x.id!==r.id); if(!state.receipts[r.date].length)delete state.receipts[r.date]; save(KEYS.receipts,state.receipts); renderReceipts(); renderSettings()})})}
+$('#openReceipts').onclick=()=>show('receipts'); $$('[data-receipt-filter]').forEach(b=>b.onclick=()=>{$$('[data-receipt-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.receiptFilter=b.dataset.receiptFilter;renderReceipts()}); $('#manualReceiptBtn').onclick=()=>$('#manualReceipt').click(); $('#manualReceipt').onchange=e=>e.target.files[0]&&saveReceiptFile(e.target.files[0],false).then(renderReceipts);
+$('#signInBtn').onclick=()=>connectAndSignIn(false);
+$('#createAccountBtn').onclick=()=>connectAndSignIn(true);
+$('#signOutBtn').onclick=signOutSync;
+$('#disconnectFirebase').onclick=disconnectFirebase;
+
+function weather(){const cached=load('d2e_weather_cache',null); if(cached&&Date.now()-cached.t<900000){applyWeather(cached);return} if(!navigator.geolocation){applyWeather({temp:'--',desc:'Location unavailable',suburb:'Melbourne'});return} navigator.geolocation.getCurrentPosition(async pos=>{try{const {latitude,longitude}=pos.coords; const w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m`).then(r=>r.json()); let suburb='Melbourne'; try{const g=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`).then(r=>r.json()); suburb=g.address.suburb||g.address.city||g.address.town||suburb}catch{} const data={t:Date.now(),temp:Math.round(w.current.temperature_2m)+'C',desc:'Current conditions',suburb,humidity:w.current.relative_humidity_2m+'%',wind:Math.round(w.current.wind_speed_10m)+' km/h'}; save('d2e_weather_cache',data); applyWeather(data)}catch{applyWeather({temp:'--',desc:'Weather unavailable',suburb:'Melbourne'})}},()=>applyWeather({temp:'--',desc:'Location blocked',suburb:'Melbourne'}),{maximumAge:900000,timeout:5000})}
+function applyWeather(d){$('#temp').textContent=d.temp||'--';$('#weatherDesc').textContent=d.desc||'Weather';$('#suburb').textContent=d.suburb||'Melbourne';$('#humidity').textContent=d.humidity||'--';$('#wind').textContent=d.wind||'--'}
+$('#islandToggle').onclick=e=>{if(e.target.closest('#themeBtn'))return;$('#island').classList.toggle('open')}; $('#timezone').value=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; $('#timezone').onchange=e=>{setLS(KEYS.tz,e.target.value);tick()};
+function tick(){const tz=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; const now=new Date(); try{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',timeZone:tz}); $('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short',timeZone:tz}); $('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit',timeZone:tz})}catch{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});$('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short'});$('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}}
+setActiveDate(calc.date===localDateStr(new Date())?'todayBtn':'pickBtn');
+(function initRanges(){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);const wk=load('d2e_wk_range',null);state.wkStart=(wk&&wk.s)||localDateStr(s);state.wkEnd=(wk&&wk.e)||localDateStr(e);const rp=load('d2e_rep_range',null);const re=new Date();const rs=new Date();rs.setDate(re.getDate()-29);state.repStart=(rp&&rp.s)||localDateStr(rs);state.repEnd=(rp&&rp.e)||localDateStr(re);state.repAllTime=!!(rp&&rp.all);})();
+renderProfile(); renderRows(); bindCalc(); renderCalc(); renderSettings(); weather(); tick(); setInterval(tick,1000);
+</script>
+</body>
+</html>
